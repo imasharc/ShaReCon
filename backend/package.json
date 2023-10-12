@@ -6,7 +6,8 @@
   "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
+    "compile": "tsc && node dist/server.js",
+    "dev": "nodemon -e ts --exec \"npm run compile\"",
     "start": "tsc && nodemon dist/server.js"
   },
   "keywords": [],
