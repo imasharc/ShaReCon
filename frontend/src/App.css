@@ -1,0 +1,22 @@
+/* App.css */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem; /* Add some padding for spacing */
+  height: 100vh; /* Set the container to fill the full viewport height */
+}
+
+.greeting-container {
+  text-align: center;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: flex-end; /* Push navigation links to the right */
+  align-items: flex-start; /* Align navigation links to the top */
+}
+
+.nav-link {
+  margin-top: 1rem; /* Add some space above navigation links */
+  margin-left: 1rem; /* Add some space between navigation links */
+}
