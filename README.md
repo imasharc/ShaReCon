@@ -6,12 +6,12 @@ RUNNING:
 [from terminal run]:
 [for backend]
 cd backend
-npm init
+npm install
 npm run start
 
 [for frontend]
 TBA
 
 techstack:
-- nodejsv18.1.1
-- typescriptv5.2.2
+- nodejs v18.18.2
+- typescript v5.2.2
