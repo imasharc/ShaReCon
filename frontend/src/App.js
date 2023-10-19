@@ -1,8 +1,8 @@
-import React from 'react';
-import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
-import LoginForm from './components/LoginForm';
-import SignupForm from './components/SignupForm';
-import '../src/App.css'
+import React from "react";
+import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
+import LoginForm from "./components/LoginForm";
+import SignupForm from "./components/SignupForm";
+import "../src/App.css";
 
 function Home() {
   return (
@@ -17,8 +17,12 @@ function App() {
     <div className="app-container">
       <Router>
         <div className="nav-container">
-          <Link className="nav-link" to="/">Home</Link>
-          <Link className="nav-link" to="/login">Login</Link>
+          <Link className="nav-link" to="/">
+            Home
+          </Link>
+          <Link className="nav-link" to="/login">
+            Login
+          </Link>
         </div>
 
         <Switch>
