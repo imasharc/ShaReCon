@@ -46,7 +46,7 @@ app.post('/signup', (req: any, res: any) => {
 
 // Define a simple endpoint that returns text
 app.get('/api/text', (req: any, res: any) => {
-  res.status(200).json({ "hello": 'world'})
+  res.status(200).json({ "status": 'success!!'})
 });
 
 app.listen(port, () => {
