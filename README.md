@@ -3,15 +3,13 @@
 Backend Nodejs server written in typescript for the modern social media platform (done as a part of engineering project)
 
 RUNNING:
-[from terminal run]:
-[for backend]
-cd backend
-npm install
-npm run start
+[look in the backend/README.md]
 
 [for frontend]
-TBA
+[look in the frontend/README.md]
 
 techstack:
 - nodejs v18.18.2
 - typescript v5.2.2
+- docker v24.0.6:
+    - node:18.18.2-alpine (dev+prod)
