@@ -3,9 +3,10 @@
 Backend Nodejs server written in typescript for the modern social media platform (done as a part of engineering project)
 
 RUNNING:
+for backend:
 [look in the backend/README.md]
 
-[for frontend]
+for frontend:
 [look in the frontend/README.md]
 
 techstack:
