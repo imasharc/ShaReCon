@@ -1,6 +1,8 @@
 ﻿version: '3.8'
 services:
   sharc_react:
+    # stdin_open: true
+    # tty: true
     build: .
     ports:
       - "3000:3000"
