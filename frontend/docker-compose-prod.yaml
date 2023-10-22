@@ -1,0 +1,12 @@
+﻿version: '3.8'
+services:
+  sharc_react_prod:
+    # stdin_open: true
+    # tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - "8080:80"
+    # env_file:
+    #   - ./.env
