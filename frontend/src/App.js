@@ -7,7 +7,7 @@ import "../src/App.css";
 function Home() {
   return (
     <div className="greeting-container">
-      <h1 className="greeting-text">Welcome to the Home</h1>
+      <h1 className="greeting-text">Welcome to the Home Page</h1>
     </div>
   );
 }
