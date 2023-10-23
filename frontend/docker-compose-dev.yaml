@@ -1,0 +1,14 @@
+﻿version: '3.8'
+services:
+  sharc_react_dev:
+    # stdin_open: true
+    # tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./src:/usr/src/app/frontend/src:ro
+    env_file:
+      - ./.env
