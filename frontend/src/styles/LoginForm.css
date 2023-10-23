@@ -1,0 +1,9 @@
+/* App.css */
+.error-message {
+    background-color: #ff0000;
+    color: #ffffff;
+    padding: 0.5rem;
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
