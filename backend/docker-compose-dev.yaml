@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  sharc_back_dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: development
+    volumes:
+      - ./:/usr/src/app/backend
+      - /usr/src/app/node_modules
+    ports:
+      - 3001:3001
+    command: npm run dev
