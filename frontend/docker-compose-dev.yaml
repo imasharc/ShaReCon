@@ -1,6 +1,7 @@
 ﻿version: '3.8'
 services:
   sharc_react_dev:
+    container_name: sharc_react_dev
     # stdin_open: true
     # tty: true
     build:
