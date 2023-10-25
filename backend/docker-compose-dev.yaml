@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   sharc_back_dev:
+    container_name: sharc_back_dev
     build:
       context: .
       dockerfile: Dockerfile.dev
