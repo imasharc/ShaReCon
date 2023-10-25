@@ -1,4 +1,20 @@
 ﻿###
+GET http://localhost:3001/api/text
+
+###
+GET http://localhost:3001/setup
+
+###
 GET http://localhost:3001
 
 ###
+POST http://localhost:3001
+Content-Type: application/json
+
+{
+    "username": "carl_newton",
+    "firstName": "Carl",
+    "lastName": "Newton",
+    "email": "carl.newton@gmail.com",
+    "password": "ilikeoranges",
+}
