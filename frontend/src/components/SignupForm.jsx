@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function SignupForm() {
-  const [name, setName] = useState('');
-  const [surname, setSurname] = useState('');
   const [username, setUsername] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
 
   const handleSignup = () => {
-    if (!name || !surname || !username || !email || !password) {
+    if (!username || !firstName || !lastName || !email || !password) {
         setError('All fields are required');
         return;
       }
@@ -20,7 +20,7 @@ function SignupForm() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name, surname, username, email, password }),
+      body: JSON.stringify({ username, firstName, lastName, email, password }),
     })
       .then((response) => {
         if (response.ok) {
@@ -43,21 +43,21 @@ function SignupForm() {
       <h2>Sign Up</h2>
       <input
         type="text"
-        placeholder="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Surname"
-        value={surname}
-        onChange={(e) => setSurname(e.target.value)}
-      />
-      <input
-        type="text"
         placeholder="Username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="First Name"
+        value={firstName}
+        onChange={(e) => setFirstName(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Last Name"
+        value={lastName}
+        onChange={(e) => setLastName(e.target.value)}
       />
       <input
         type="text"
