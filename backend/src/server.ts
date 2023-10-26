@@ -10,25 +10,6 @@ const port = 3001;
 app.use(cors({ origin: 'http://localhost:3000'}));
 app.use(express.json());
 app.use(bodyParser.json());
-app.use(session({
-  secret: 'your-secret-key',
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    maxAge: 3 * 60 * 60 * 1000, // Set the session expiration time (1 hour)
-  },
-}));
-
-// Middleware to check if the user is logged in
-const checkedIfLoggedIn = (req: any, res: any, next: any) => {
-  if (req.username && req.session.user) {
-    // Reset session expiration
-    req.session.cookie.expires = new Date(Date.now() + 3 * 60 * 60 * 1000); // Extend session for 2 more hour
-    next();
-  } else {
-    res.status(403).json({ message: 'Unauthorized' });
-  }
-};
 
 /**
  * ENDPOINTS:
@@ -104,7 +85,7 @@ app.get('/api/text', (req: any, res: any) => {
 });
 
 // API endpoint for user login
-app.post('/login', async (req: any, res: any) => {
+app.post('/login', , async (req: any, res: any) => {
   const { username, password } = req.body; // Parse the user input from the JSON request body
 
   // Query the database to retrieve password for the user
@@ -124,9 +105,8 @@ app.post('/login', async (req: any, res: any) => {
 
     if (passwordsMatch) {
       // Authentication successful
-      req.session.user = username;
       res.status(200).json({ message: 'Login successful' });
-      console.log({username: username, password: password, session: req.session, session_user: req.session.user, req_username: req.username})
+      console.log({username: username, password: password })
     } else {
       // Authentication failed
       res.status(401).json({ message: 'Login failed' });
@@ -143,13 +123,10 @@ app.get('/protected', (req: any, res: any) => {
 });
 
 // Define a logout route
-app.post('/logout', (req: any, res: any) => {
-  req.session.destroy();
-  res.json({ message: 'Logged out successfully' });
-});
+
 
 // API endpoint for account registration
-app.post('/signup', async (req: any, res: any) => {
+app.post('/signup', , async (req: any, res: any) => {
   const formData = req.body;
   const { username, firstName, lastName, email, password } = req.body;
 
