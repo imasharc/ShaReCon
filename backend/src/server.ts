@@ -85,7 +85,7 @@ app.get('/api/text', (req: any, res: any) => {
 });
 
 // API endpoint for user login
-app.post('/login', , async (req: any, res: any) => {
+app.post('/login', async (req: any, res: any) => {
   const { username, password } = req.body; // Parse the user input from the JSON request body
 
   // Query the database to retrieve password for the user
@@ -126,7 +126,7 @@ app.get('/protected', (req: any, res: any) => {
 
 
 // API endpoint for account registration
-app.post('/signup', , async (req: any, res: any) => {
+app.post('/signup', async (req: any, res: any) => {
   const formData = req.body;
   const { username, firstName, lastName, email, password } = req.body;
 
