@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors'); // Import the cors middleware
 const bodyParser = require('body-parser');
+const bcrypt = require('bcryptjs')
 var pool = require('./db')
 const app = express();
 const port = 3001;
@@ -68,7 +69,7 @@ app.get('/api/text', (req: any, res: any) => {
   res.status(200).json({ "status": 'success!!'})
 });
 
-// Login endpoint
+// API endpoint for user login
 app.post('/login', async (req: any, res: any) => {
   const { username, password } = req.body; // Parse the user input from the JSON request body
 
@@ -85,8 +86,9 @@ app.post('/login', async (req: any, res: any) => {
     }
 
     const storedPassword = result.rows[0].password;
+    const passwordsMatch = await bcrypt.compare(password, storedPassword);
 
-    if (storedPassword === password) {
+    if (passwordsMatch) {
       // Authentication successful
       res.status(200).json({ message: 'Login successful' });
       console.log({username: username, password: password})
@@ -100,8 +102,10 @@ app.post('/login', async (req: any, res: any) => {
   }
 });
 
-app.post('/signup', (req: any, res: any) => {
+// API endpoint for account registration
+app.post('/signup', async (req: any, res: any) => {
   const formData = req.body;
+  const { username, firstName, lastName, email, password } = req.body;
 
   // Log the form data
   console.log('Received form data:', formData);
@@ -110,8 +114,25 @@ app.post('/signup', (req: any, res: any) => {
     return res.status(400).json({ error: 'Form data is empty' });
   }
 
-  // If form data is not empty, return a 200 OK response
-  res.status(200).json({ message: 'Form data received and processed successfully' });
+  try {
+    // Hash the user's password before storing it in the database
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    const query = {
+      text:
+        'INSERT INTO account (username, firstname, lastname, email, password) VALUES ($1, $2, $3, $4, $5)',
+      values: [username, firstName, lastName, email, hashedPassword],
+    };
+
+    await pool.query(query);
+
+    // If form data is not empty, return a 200 OK response
+    res.status(200).json({ message: 'Form data received and processed successfully' });
+    console.log({ username: username, firstName: firstName, lastName: lastName, email: email, hashedPassword: hashedPassword, password: password })
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Registration failed');
+  }
 });
 
 app.listen(port, () => {
