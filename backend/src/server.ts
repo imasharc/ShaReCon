@@ -9,12 +9,6 @@ app.use(cors({ origin: 'http://localhost:3000'}));
 app.use(express.json());
 app.use(bodyParser.json());
 
-// Dummy user data (replace this with a database)
-const users = [
-  { username: 'user1', password: 'password1' },
-  { username: 'user2', password: 'password2' },
-];
-
 // ENDPOINTS
 
 // Setting up a single table in postgres
@@ -77,9 +71,6 @@ app.get('/api/text', (req: any, res: any) => {
 // Login endpoint
 app.post('/login', async (req: any, res: any) => {
   const { username, password } = req.body; // Parse the user input from the JSON request body
-
-  // Find the user in the dummy user data (replace with database query)
-  // const user = users.find((u) => u.username === username && u.password === password);
 
   // Query the database to retrieve password for the user
   const query = {
