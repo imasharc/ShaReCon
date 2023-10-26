@@ -1,13 +1,13 @@
-﻿###
+﻿### fetch json text
 GET http://localhost:3001/api/text
 
-###
+### create table
 GET http://localhost:3001/setup
 
-###
+### select * from table
 GET http://localhost:3001
 
-###
+### insert into table
 POST http://localhost:3001
 Content-Type: application/json
 
