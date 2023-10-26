@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 function SignupForm() {
   const [username, setUsername] = useState('');
@@ -8,6 +8,7 @@ function SignupForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const history = useHistory();
 
   const handleSignup = () => {
     if (!username || !firstName || !lastName || !email || !password) {
@@ -27,6 +28,9 @@ function SignupForm() {
           // Handle successful signup (e.g., navigate to a different page)
           console.log('Signup successful');
           setError(null); // Reset the error state
+
+          // Redirect to the login page (or any other page)
+          history.push(`/account/${username}`);
         } else {
           // Handle signup error (e.g., show an error message)
           setError('Signup failed');
