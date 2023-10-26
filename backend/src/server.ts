@@ -24,7 +24,7 @@ app.get('/setup', async (req: any, res: any) => {
   }
 });
 
-// Return all rows from 'user' table
+// Return all rows from account table
 app.get('/', async (req: any, res: any) => {
   try {
     const data = await pool.query(`SELECT * FROM account;`)
@@ -36,7 +36,33 @@ app.get('/', async (req: any, res: any) => {
   }
 });
 
-// Insert a new user into table 'user'
+// Return all rows from account table
+app.get('/user/:username', async (req: any, res: any) => {
+  const { username } = req.params;
+
+  try {
+    const query = {
+      text: `SELECT username, firstName, lastName, email FROM account WHERE username = $1`,
+      values: [username]
+    }
+
+    const { rows } = await pool.query(query);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const user = rows[0];
+    res.status(200).json(user);
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ message: "Internal server error" })
+    console.log({ "failAt": 'GET /'})
+    // pool.end();
+  }
+});
+
+// Insert a new user into table account
 app.post('/', async (req: any, res: any) => {
   const { username, firstName, lastName, email, password } = req.body
   try {
