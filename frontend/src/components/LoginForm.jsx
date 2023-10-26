@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Import the Link component
+import { Link, useHistory } from 'react-router-dom'; // Import the Link component
 import '../styles/LoginForm.css'
 
 function LoginForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const history = useHistory(); // Initialize useHistory
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -23,6 +24,9 @@ function LoginForm() {
           // Handle successful login
           console.log('Login successful');
           setError(null); // Reset the error state on success
+          
+          // Redirect to the account page with the username
+          history.push(`/account/${username}`);
         } else {
           // Handle login error and set error message
           setError('Login or password incorrect');
@@ -52,7 +56,6 @@ function LoginForm() {
       <button onClick={handleLogin}>Login</button>
       {error && <div className="error-message">{error}</div>}
 
-      {/* Add the link to account creation */}
       <p>
         Don't have an account yet? <Link to="/signup">Sign up here</Link>.
       </p>
