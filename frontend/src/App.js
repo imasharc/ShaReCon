@@ -24,6 +24,9 @@ function App() {
           <Link className="nav-link" to="/login">
             Login
           </Link>
+          <Link className="nav-link" to="/logout">
+            Log out
+          </Link>
         </div>
 
         <Switch>
