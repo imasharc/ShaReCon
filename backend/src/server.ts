@@ -36,7 +36,7 @@ app.get('/', async (req: any, res: any) => {
   }
 });
 
-// Return all rows from account table
+// Return specific user data based on it's username
 app.get('/user/:username', async (req: any, res: any) => {
   const { username } = req.params;
 
