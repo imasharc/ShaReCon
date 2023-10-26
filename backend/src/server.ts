@@ -15,7 +15,15 @@ app.use(bodyParser.json());
 // Setting up a single table in postgres
 app.get('/setup', async (req: any, res: any) => {
   try {
-    await pool.query(`CREATE TABLE account (id SERIAL PRIMARY KEY, username VARCHAR(50), firstName VARCHAR(50), lastName VARCHAR(50), email VARCHAR(50), password VARCHAR(100));`)
+    await pool.query(`CREATE TABLE account
+    (
+      id SERIAL PRIMARY KEY,
+      username VARCHAR(50),
+      firstName VARCHAR(50),
+      lastName VARCHAR(50),
+      email VARCHAR(50),
+      password VARCHAR(100)
+      );`)
     res.status(200).send({ message: `Successfully created table user`})
   } catch (err) {
     console.log(err)
