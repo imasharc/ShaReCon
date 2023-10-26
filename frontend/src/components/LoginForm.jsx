@@ -7,7 +7,9 @@ function LoginForm() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
 
-  const handleLogin = () => {
+  const handleLogin = (e) => {
+    e.preventDefault();
+    
     // Send a POST request to your '/login' endpoint with the username and password
     fetch('http://localhost:3001/login', {
       method: 'POST',
