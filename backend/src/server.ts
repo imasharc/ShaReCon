@@ -30,8 +30,16 @@ const checkedIfLoggedIn = (req: any, res: any, next: any) => {
   }
 };
 
-// ENDPOINTS
-
+/**
+ * ENDPOINTS:
+ * 1. GET /setup -> Setting up a single table in postgres
+ * 2. GET / -> Return all rows from account table
+ * 3. GET /user/:username -> Return specific user data based on it's username
+ * 4. GET /api/text -> Defines a simple endpoint that returns text
+ * 5. POST /login -> API endpoint for user login
+ * 6. GET /protected -> Defines a protected route
+ * 7. POST /signup -> API endpoint for account registration
+ */
 // Setting up a single table in postgres
 app.get('/setup', async (req: any, res: any) => {
   try {
@@ -65,7 +73,7 @@ app.get('/', async (req: any, res: any) => {
 });
 
 // Return specific user data based on it's username
-app.get('/user/:username', checkedIfLoggedIn, async (req: any, res: any) => {
+app.get('/user/:username', async (req: any, res: any) => {
   const { username } = req.params;
 
   try {
@@ -90,35 +98,7 @@ app.get('/user/:username', checkedIfLoggedIn, async (req: any, res: any) => {
   }
 });
 
-// Insert a new user into table account
-app.post('/', async (req: any, res: any) => {
-  const { username, firstName, lastName, email, password } = req.body
-  try {
-    await pool.query(`INSERT INTO account
-    (
-      username,
-      firstname,
-      lastname,
-      email,
-      password
-    )
-    VALUES
-    (
-      $1,
-      $2,
-      $3,
-      $4,
-      $5
-    );`, [username, firstName, lastName, email, password])
-    res.status(200).send({ message: `Successfully added user ${username}`})
-  } catch (err) {
-    console.log(err)
-    res.status(500).json({ "failAt": 'POST /'})
-    pool.end();
-  }
-});
-
-// Define a simple endpoint that returns text
+// Defines a simple endpoint that returns text
 app.get('/api/text', (req: any, res: any) => {
   res.status(200).json({ "status": 'success!!'})
 });
@@ -157,8 +137,8 @@ app.post('/login', async (req: any, res: any) => {
   }
 });
 
-// Define a protected route
-app.get('/protected', checkedIfLoggedIn, (req: any, res: any) => {
+// Defines a protected route
+app.get('/protected', (req: any, res: any) => {
   res.json({ message: 'You have access to this protected resource.' });
 });
 
