@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors'); // Import the cors middleware
 const bodyParser = require('body-parser');
-const pool = require('./db')
+var pool = require('./db')
 const app = express();
 const port = 3001;
 
