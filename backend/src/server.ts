@@ -39,8 +39,8 @@ app.get('/setup', async (req: any, res: any) => {
     (
       id SERIAL PRIMARY KEY,
       username VARCHAR(50),
-      firstName VARCHAR(50),
-      lastName VARCHAR(50),
+      firstname VARCHAR(50),
+      lastname VARCHAR(50),
       email VARCHAR(50),
       password VARCHAR(100)
       );`)
@@ -70,7 +70,7 @@ app.get('/user/:username', checkedIfLoggedIn, async (req: any, res: any) => {
 
   try {
     const query = {
-      text: `SELECT username, firstName, lastName, email FROM account WHERE username = $1`,
+      text: `SELECT username, firstname, lastname, email FROM account WHERE username = $1`,
       values: [username]
     }
 
@@ -97,8 +97,8 @@ app.post('/', async (req: any, res: any) => {
     await pool.query(`INSERT INTO account
     (
       username,
-      firstName,
-      lastName,
+      firstname,
+      lastname,
       email,
       password
     )
