@@ -20,7 +20,7 @@ const users = [
 // Setting up a single table in postgres
 app.get('/setup', async (req: any, res: any) => {
   try {
-    await pool.query(`CREATE TABLE "user" (id SERIAL PRIMARY KEY, username VARCHAR(50), firstName VARCHAR(50), lastName VARCHAR(50), email VARCHAR(50), password VARCHAR(100));`)
+    await pool.query(`CREATE TABLE account (id SERIAL PRIMARY KEY, username VARCHAR(50), firstName VARCHAR(50), lastName VARCHAR(50), email VARCHAR(50), password VARCHAR(100));`)
     res.status(200).send({ message: `Successfully created table user`})
   } catch (err) {
     console.log(err)
@@ -32,7 +32,7 @@ app.get('/setup', async (req: any, res: any) => {
 // Return all rows from 'user' table
 app.get('/', async (req: any, res: any) => {
   try {
-    const data = await pool.query(`SELECT * FROM "user";`)
+    const data = await pool.query(`SELECT * FROM account;`)
     res.status(200).send(data.rows)
   } catch (err) {
     console.log(err)
@@ -45,7 +45,7 @@ app.get('/', async (req: any, res: any) => {
 app.post('/', async (req: any, res: any) => {
   const { username, firstName, lastName, email, password } = req.body
   try {
-    await pool.query(`INSERT INTO "user"
+    await pool.query(`INSERT INTO account
     (
       username,
       firstName,
@@ -75,18 +75,37 @@ app.get('/api/text', (req: any, res: any) => {
 });
 
 // Login endpoint
-app.post('/login', (req: any, res: any) => {
+app.post('/login', async (req: any, res: any) => {
   const { username, password } = req.body; // Parse the user input from the JSON request body
 
   // Find the user in the dummy user data (replace with database query)
-  const user = users.find((u) => u.username === username && u.password === password);
+  // const user = users.find((u) => u.username === username && u.password === password);
 
-  if (user) {
-    // Authentication successful
-    res.status(200).json({ message: 'Login successful' });
-  } else {
-    // Authentication failed
-    res.status(401).json({ message: 'Login failed' });
+  // Query the database to retrieve password for the user
+  const query = {
+    text: `SELECT password FROM account WHERE username = $1`,
+    values: [username]
+  }
+
+  try {
+    const result = await pool.query(query);
+    if (result.rows.length === 0) {
+      return res.status(401).send('Invalid username or password');
+    }
+
+    const storedPassword = result.rows[0].password;
+
+    if (storedPassword === password) {
+      // Authentication successful
+      res.status(200).json({ message: 'Login successful' });
+      console.log({username: username, password: password})
+    } else {
+      // Authentication failed
+      res.status(401).json({ message: 'Login failed' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal server error');
   }
 });
 
