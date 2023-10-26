@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
 import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
+import AccountPanel from "./components/AccountPanel";
 import "../src/App.css";
 
 function Home() {
@@ -28,6 +29,7 @@ function App() {
         <Switch>
           <Route path="/login" component={LoginForm} />
           <Route path="/signup" component={SignupForm} />
+          <Route path="/account/:username" component={AccountPanel} />
           <Route path="/" component={Home} />
         </Switch>
       </Router>
