@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors'); // Import the cors middleware
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs')
+const session = require('express-session')
 var pool = require('./db')
 const app = express();
 const port = 3001;
@@ -9,6 +10,25 @@ const port = 3001;
 app.use(cors({ origin: 'http://localhost:3000'}));
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 60 * 60 * 1000, // Set the session expiration time (1 hour)
+  },
+}));
+
+// Middleware to check if the user is logged in
+const requireLogin = (req: any, res: any, next: any) => {
+  if (req.session && req.session.user) {
+    // Reset session expiration
+    req.session.cookie.expires = new Date(Date.now() + 60 * 60 * 1000); // Extend session for 1 more hour
+    next();
+  } else {
+    res.status(403).json({ message: 'Unauthorized' });
+  }
+};
 
 // ENDPOINTS
 
