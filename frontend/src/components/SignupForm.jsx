@@ -1,14 +1,72 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { faCheck, faTimes, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import '../styles/SignupForm.css'
+
+const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
+const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 function SignupForm() {
+  const userRef = useRef();
+  const errRef = useRef(); 
+
   const [username, setUsername] = useState('');
+  const [validUsername, setValidUsername] = useState(false);
+  const [usernameFocus, setUsernameFocus] = useState(false);
+
   const [firstName, setFirstName] = useState('');
+  const [firstNameFocus, setfirstNameFocus] = useState(false);
+
   const [lastName, setLastName] = useState('');
+  const [lastNameFocus, setlastNameFocus] = useState(false);
+
   const [email, setEmail] = useState('');
+  const [emailFocus, setEmailFocus] = useState(false);
+  
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
+  const [validPassword, setvalidPassword] = useState(false);
+  const [passwordFocus, setpasswordFocus] = useState(false);
+
+  const [matchPassword, setmatchPassword] = useState('');
+  const [validMatch, setValidMatch] = useState(false);
+  const [matchPasswordFocus, setmatchPasswordFocus] = useState(false);
+
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+
   const history = useHistory();
+
+  // set the focus when the component loads
+  useEffect(() => {
+    // Check if the input element exists before trying to focus on it
+    if (userRef.current) {
+      userRef.current.focus();
+    }
+  }, [])
+
+  // validate username
+  useEffect(() => {
+    const result = USER_REGEX.test(username);
+    console.log(result);
+    console.log(username);
+    setValidUsername(result);
+  }, [username])
+
+    // validate password
+    useEffect(() => {
+      const result = PWD_REGEX.test(password);
+      console.log(result);
+      console.log(password);
+      setvalidPassword(result);
+      const match = password === matchPassword;
+      setValidMatch(match);
+    }, [password, matchPassword])
+
+    // clear out the error message everytime any of the state pieces from dependency array change
+    useEffect(() => {
+      setError('');
+    }, [username, firstName, lastName, email, password, matchPassword])
 
   const handleSignup = () => {
     if (!username || !firstName || !lastName || !email || !password) {
@@ -43,7 +101,7 @@ function SignupForm() {
   };
 
   return (
-    <div>
+    <section>
       <h2>Sign Up</h2>
       <input
         type="text"
@@ -76,11 +134,11 @@ function SignupForm() {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button onClick={handleSignup}>Sign Up</button>
-      {error && <div className="error-message">{error}</div>}
+      <p ref={errRef} className={error ? "errmsg" : "offscreen"} aria-live="assertive">{error}</p>
       <p>
         Already have an account? <Link to="/login">Log in here</Link>.
       </p>
-    </div>
+    </section>
   );
 }
 
