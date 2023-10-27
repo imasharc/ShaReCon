@@ -101,7 +101,7 @@ function SignupForm() {
   };
 
   return (
-    <section>
+    <section className='SignupForm'> 
       <h1>Sign Up</h1>
       <form>
         <label htmlFor='username'>
@@ -169,7 +169,8 @@ function SignupForm() {
         <p id="pwdnote" className={passwordFocus && !validPassword ? "instructions" : "offscreen"}>
             <FontAwesomeIcon icon={faInfoCircle} />
             8 to 24 characters.<br />
-            Must include uppercase and lowercase letters, a number and a special character.<br />
+            Must include uppercase and lowercase letters,<br />
+            a number and a special character.<br />
             Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
         </p>
       </form>
