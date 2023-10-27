@@ -25,8 +25,8 @@ function SignupForm() {
   const [emailFocus, setEmailFocus] = useState(false);
   
   const [password, setPassword] = useState('');
-  const [validPassword, setvalidPassword] = useState(false);
-  const [passwordFocus, setpasswordFocus] = useState(false);
+  const [validPassword, setValidPassword] = useState(false);
+  const [passwordFocus, setPasswordFocus] = useState(false);
 
   const [matchPassword, setmatchPassword] = useState('');
   const [validMatch, setValidMatch] = useState(false);
@@ -58,7 +58,7 @@ function SignupForm() {
       const result = PWD_REGEX.test(password);
       console.log(result);
       console.log(password);
-      setvalidPassword(result);
+      setValidPassword(result);
       const match = password === matchPassword;
       setValidMatch(match);
     }, [password, matchPassword])
@@ -129,6 +129,7 @@ function SignupForm() {
           Must begin with a letter.<br />
           Letters, numbers, underscores, hyphens allowed.
         </p>
+
         <input
           type="text"
           placeholder="First Name"
@@ -147,12 +148,30 @@ function SignupForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
+        
+        <label htmlFor="password">
+            Password:
+            <FontAwesomeIcon icon={faCheck} className={validPassword ? "valid" : "hide"} />
+            <FontAwesomeIcon icon={faTimes} className={validPassword || !password ? "hide" : "invalid"} />
+        </label>
         <input
-          type="password"
-          placeholder="Password"
+          type='password'
+          id='password'
+          placeholder='Password'
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
+          aria-invalid={validPassword ? 'false' : 'true'}
+          aria-describedby='pwdnote'
+          onFocus={() => setPasswordFocus(true)}
+          onBlur={() => setPasswordFocus(false)}
         />
+        <p id="pwdnote" className={passwordFocus && !validPassword ? "instructions" : "offscreen"}>
+            <FontAwesomeIcon icon={faInfoCircle} />
+            8 to 24 characters.<br />
+            Must include uppercase and lowercase letters, a number and a special character.<br />
+            Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
+        </p>
       </form>
       <button onClick={handleSignup}>Sign Up</button>
       <p ref={errRef} className={error ? "errmsg" : "offscreen"} aria-live="assertive">{error}</p>
