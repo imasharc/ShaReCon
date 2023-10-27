@@ -102,37 +102,58 @@ function SignupForm() {
 
   return (
     <section>
-      <h2>Sign Up</h2>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="First Name"
-        value={firstName}
-        onChange={(e) => setFirstName(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Last Name"
-        value={lastName}
-        onChange={(e) => setLastName(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+      <h1>Sign Up</h1>
+      <form>
+        <label htmlFor='username'>
+          Username:
+          <FontAwesomeIcon icon={faCheck} className={validUsername ? "valid" : "hide"} />
+          <FontAwesomeIcon icon={faTimes} className={validUsername || !username ? "hide" : "invalid"} />
+        </label>
+        <input
+          type='text'
+          id='username'
+          placeholder='Username'
+          ref={userRef}
+          autoComplete='off'
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+          aria-invalid={validUsername ? 'false' : 'true'}
+          aria-describedby='uidnote'
+          onFocus={() => setUsernameFocus(true)}
+          onBlur={() => setUsernameFocus(false)}
+        />
+        <p id="uidnote" className={usernameFocus && username && !validUsername ? "instructions" : "offscreen"}>
+          <FontAwesomeIcon icon={faInfoCircle} />
+          4 to 24 characters.<br />
+          Must begin with a letter.<br />
+          Letters, numbers, underscores, hyphens allowed.
+        </p>
+        <input
+          type="text"
+          placeholder="First Name"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Last Name"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </form>
       <button onClick={handleSignup}>Sign Up</button>
       <p ref={errRef} className={error ? "errmsg" : "offscreen"} aria-live="assertive">{error}</p>
       <p>
