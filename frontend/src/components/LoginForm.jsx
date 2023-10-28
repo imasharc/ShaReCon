@@ -1,7 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom'; // Import the Link component
-import { faCheck, faTimes, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../styles/LoginForm.css'
 
 function LoginForm() {
@@ -26,34 +24,50 @@ function LoginForm() {
     setError('');
   }, [username, password])
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     
-    // Send a POST request to your '/login' endpoint with the username and password
-    fetch('http://localhost:3001/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          // Handle successful login
-          console.log('Login successful');
-          setError(null); // Reset the error state on success
-          
-          // Redirect to the account page with the username
-          history.push(`/account/${username}`);
-        } else {
-          // Handle login error and set error message
-          setError('Login or password incorrect');
-        }
+    try {
+      setUsername('');
+      setPassword('');
+      // Send a POST request to your '/login' endpoint with the username and password
+      fetch('http://localhost:3001/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+        body: JSON.stringify({ username, password }),
       })
-      .catch((error) => {
-        console.error('Error:', error);
-        setError('An error occurred while logging in');
-      });
+        .then((response) => {
+          if (response.ok) {
+            // Handle successful login
+            console.log('Login successful');
+            setError(null); // Reset the error state on success
+            
+            // Redirect to the account page with the username
+            history.push(`/account/${username}`);
+          } else {
+            // Handle login error and set error message
+            setError('Login or password incorrect');
+          }
+        })
+        // .catch((error) => {
+        //   console.error('Error:', error);
+        //   setError('An error occurred while logging in');
+        // });
+    } catch (err) {
+      if (!err?.response) {
+        setError('No Server Response');
+      } else if (err.response?.status === 400) {
+        setError('Missing Username or Password');
+      } else if (err.response?.status === 401) {
+        setError('Unauthorized');
+      } else {
+        setError('Login Failed');
+      }
+      errRef.current.focus();
+    }
   };
 
   return (
