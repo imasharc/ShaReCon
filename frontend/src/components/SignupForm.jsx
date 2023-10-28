@@ -78,7 +78,18 @@ function SignupForm() {
       setError('');
     }, [username, firstName, lastName, email, password, matchingPassword])
 
-  const handleSignup = () => {
+  const handleSignup = async (e) => {
+    e.preventDefault();
+
+    // prevent submitting invalid form (via JS hack) by revalidating the regexes
+    const v1 = EMAIL_REGEX.test(email);
+    const v2 = USER_REGEX.test(username);
+    const v3 = PWD_REGEX.test(password);
+    if (!v1 || !v2 || !v3) {
+        setError("Invalid Entry");
+        return;
+    }
+
     if (!username || !firstName || !lastName || !email || !password) {
         setError('All fields are required');
         return;
@@ -113,7 +124,7 @@ function SignupForm() {
   return (
     <section className='SignupForm'> 
       <h1>Sign Up</h1>
-      <form>
+      <form onSubmit={handleSignup}>
       <label htmlFor='username'>
           First Name:
           {/* <FontAwesomeIcon icon={faCheck} className={validUsername ? "valid" : "hide"} />
@@ -235,8 +246,9 @@ function SignupForm() {
             <FontAwesomeIcon icon={faInfoCircle} />
             Must match the first password input field.
         </p>
+
+        <button disabled={!validUsername || !validPassword || !validMatch ? true : false}>Sign Up</button>
       </form>
-      <button onClick={handleSignup}>Sign Up</button>
       <p ref={errRef} className={error ? "errmsg" : "offscreen"} aria-live="assertive">{error}</p>
       <p>
         Already have an account? <Link to="/login">Log in here</Link>.
