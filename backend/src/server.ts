@@ -130,6 +130,12 @@ app.post('/signup', async (req: any, res: any) => {
   const formData = req.body;
   const { username, firstName, lastName, email, password } = req.body;
 
+    // Check if the username already exists in the database
+    const checkUsernameQuery = {
+      text: 'SELECT username FROM account WHERE username = $1',
+      values: [username],
+    };
+
   // Log the form data
   console.log('Received form data:', formData);
 
@@ -138,6 +144,12 @@ app.post('/signup', async (req: any, res: any) => {
   }
 
   try {
+    const usernameExists = await pool.query(checkUsernameQuery);
+    
+    if (usernameExists.rows.length > 0) {
+      return res.status(409).json({ error: 'Username already exists' });
+    }
+    
     // Hash the user's password before storing it in the database
     const hashedPassword = await bcrypt.hash(password, 10);
     
