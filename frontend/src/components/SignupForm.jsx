@@ -94,35 +94,50 @@ function SignupForm() {
         setError('All fields are required');
         return;
       }
-    // Send a POST request to your '/signup' endpoint with the signup data
-    fetch('http://localhost:3001/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, firstName, lastName, email, password }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          // Handle successful signup (e.g., navigate to a different page)
-          console.log('Signup successful');
-          setError(null); // Reset the error state
 
-          // Redirect to the login page (or any other page)
-          history.push(`/account/${username}`);
+      try {
+        // Send a POST request to your '/signup' endpoint with the signup data
+        fetch('http://localhost:3001/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, firstName, lastName, email, password }),
+        })
+          .then((response) => {
+            if (response.ok) {
+              // Handle successful signup (e.g., navigate to a different page)
+              console.log('Signup successful');
+              console.log(response);
+              setSuccess(true);
+              setError(null); // Reset the error state
+    
+              // Redirect to the login page (or any other page)
+              history.push(`/account/${username}`);
+            } else {
+              // Handle signup error (e.g., show an error message)
+              setError('Signup failed');
+            }
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+            setError('No Server Response');
+          });
+      } catch (err) {
+        if (!err?.response) {
+          setError('No Server Response');
+        } else if (err.response?.status === 409) {
+          setError('Username Taken');
         } else {
-          // Handle signup error (e.g., show an error message)
-          setError('Signup failed');
+          setError('Registration Failed');
         }
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        setError('An error occurred while signing up');
-      });
+        errRef.current.focus();
+      }
   };
 
   return (
     <section className='SignupForm'> 
+      <p ref={errRef} className={error ? "errmsg" : "offscreen"} aria-live="assertive">{error}</p>
       <h1>Sign Up</h1>
       <form onSubmit={handleSignup}>
       <label htmlFor='username'>
@@ -249,7 +264,6 @@ function SignupForm() {
 
         <button disabled={!validUsername || !validPassword || !validMatch ? true : false}>Sign Up</button>
       </form>
-      <p ref={errRef} className={error ? "errmsg" : "offscreen"} aria-live="assertive">{error}</p>
       <p>
         Already have an account? <Link to="/login">Log in here</Link>.
       </p>
