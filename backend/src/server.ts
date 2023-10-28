@@ -3,6 +3,7 @@ const cors = require('cors'); // Import the cors middleware
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs')
 const session = require('express-session')
+const cookieParser = require('cookie-parser');
 var pool = require('./db')
 const app = express();
 const port = 3001;
@@ -10,6 +11,16 @@ const port = 3001;
 app.use(cors({ origin: 'http://localhost:3000'}));
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(session({
+  secret: 'secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false,
+    maxAge: 24 * 60 * 60 * 1000
+  }
+}))
 
 /**
  * ENDPOINTS:
@@ -90,7 +101,7 @@ app.post('/login', async (req: any, res: any) => {
 
   // Query the database to retrieve password for the user
   const query = {
-    text: `SELECT password FROM account WHERE username = $1`,
+    text: `SELECT * FROM account WHERE username = $1`,
     values: [username]
   }
 
@@ -105,15 +116,16 @@ app.post('/login', async (req: any, res: any) => {
 
     if (passwordsMatch) {
       // Authentication successful
-      res.status(200).json({ message: 'Login successful' });
-      console.log({username: username, password: password })
+      req.session.username = username;
+      console.log({username: username, password: password, req_session_username: req.session.username })
+      return res.status(200).json({ message: 'Login successful', username: req.session.username });
     } else {
       // Authentication failed
-      res.status(401).json({ message: 'Login failed' });
+      return res.status(401).json({ message: 'Login failed' });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).send('Internal server error');
+    return res.status(500).send('Internal server error');
   }
 });
 
@@ -122,8 +134,14 @@ app.get('/protected', (req: any, res: any) => {
   res.json({ message: 'You have access to this protected resource.' });
 });
 
-// Define a logout route
-
+// Endpoint for checking active session
+app.get('/check-session', (req: any, res: any) => {
+  if (req.session.username) {
+    res.status(200).json({ valid: true, username: req.session.username });
+  } else {
+    res.status(401).json({ valid: false });
+  }
+});
 
 // API endpoint for account registration
 app.post('/signup', async (req: any, res: any) => {

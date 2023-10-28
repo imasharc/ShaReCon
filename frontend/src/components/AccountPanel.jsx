@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 function AccountPanel() {
   const [userData, setUserData] = useState({
@@ -9,6 +9,7 @@ function AccountPanel() {
     email: '',
   });
   const { username } = useParams();
+  const history = useHistory(); // Initialize useHistory
 
   // Function to fetch user data
   const fetchUserData = () => {
@@ -34,6 +35,21 @@ function AccountPanel() {
     // Fetch user data when the component mounts
     fetchUserData();
   }, []);
+
+    // Check if the user session is active
+    useEffect(()=> {
+      fetch(`http://localhost:3001/check-session`)
+        .then((response) => {
+          if (response.ok) {
+            return response.json(response);
+          }
+        })
+        .catch((error) => {
+          history.push(`/login`);
+          console.error('Error:', error);
+          // Handle the error (e.g., display an error message)
+        });
+    });
 
   useEffect(() => {
     // Use a setTimeout to wait for userData to be fetched

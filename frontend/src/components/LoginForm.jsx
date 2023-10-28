@@ -24,6 +24,21 @@ function LoginForm() {
     setError('');
   }, [username, password])
 
+  // Check if the user session is active
+  // useEffect(()=> {
+  //   fetch(`http://localhost:3001/check-session`)
+  //     .then((response) => {
+  //       if (response.data.valid) {
+  //         return response.json(response.data.req.session.username);
+  //       } 
+  //     })
+  //     .catch((error) => {
+  //       history.push(`/login`);
+  //       console.error('Error:', error);
+  //       // Handle the error (e.g., display an error message)
+  //     });
+  // });
+
   const handleLogin = async (e) => {
     e.preventDefault();
     
