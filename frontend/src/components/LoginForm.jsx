@@ -39,7 +39,7 @@ function LoginForm() {
   };
 
   return (
-    <div>
+    <section className='LoginForm'>
       <h2>Login</h2>
       <input
         type="text"
@@ -59,7 +59,7 @@ function LoginForm() {
       <p>
         Don't have an account yet? <Link to="/signup">Sign up here</Link>.
       </p>
-    </div>
+    </section>
   );
 }
 
