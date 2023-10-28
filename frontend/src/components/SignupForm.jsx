@@ -28,9 +28,9 @@ function SignupForm() {
   const [validPassword, setValidPassword] = useState(false);
   const [passwordFocus, setPasswordFocus] = useState(false);
 
-  const [matchPassword, setmatchPassword] = useState('');
+  const [matchingPassword, setMatchingPassword] = useState('');
   const [validMatch, setValidMatch] = useState(false);
-  const [matchPasswordFocus, setmatchPasswordFocus] = useState(false);
+  const [matchingPasswordFocus, setMatchingPasswordFocus] = useState(false);
 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -59,14 +59,14 @@ function SignupForm() {
       console.log(result);
       console.log(password);
       setValidPassword(result);
-      const match = password === matchPassword;
+      const match = password === matchingPassword;
       setValidMatch(match);
-    }, [password, matchPassword])
+    }, [password, matchingPassword])
 
     // clear out the error message everytime any of the state pieces from dependency array change
     useEffect(() => {
       setError('');
-    }, [username, firstName, lastName, email, password, matchPassword])
+    }, [username, firstName, lastName, email, password, matchingPassword])
 
   const handleSignup = () => {
     if (!username || !firstName || !lastName || !email || !password) {
@@ -104,6 +104,25 @@ function SignupForm() {
     <section className='SignupForm'> 
       <h1>Sign Up</h1>
       <form>
+        <input
+          type="text"
+          placeholder="First Name"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Last Name"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        
         <label htmlFor='username'>
           Username:
           <FontAwesomeIcon icon={faCheck} className={validUsername ? "valid" : "hide"} />
@@ -129,25 +148,6 @@ function SignupForm() {
           Must begin with a letter.<br />
           Letters, numbers, underscores, hyphens allowed.
         </p>
-
-        <input
-          type="text"
-          placeholder="First Name"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Last Name"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
         
         <label htmlFor="password">
             Password:
@@ -172,6 +172,28 @@ function SignupForm() {
             Must include uppercase and lowercase letters,<br />
             a number and a special character.<br />
             Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
+        </p>
+
+        <label htmlFor="confirm_pwd">
+            Confirm Password:
+            <FontAwesomeIcon icon={faCheck} className={validMatch && matchingPassword ? "valid" : "hide"} />
+            <FontAwesomeIcon icon={faTimes} className={validMatch || !matchingPassword ? "hide" : "invalid"} />
+        </label>
+        <input
+            type="password"
+            id="confirm_password"
+            placeholder='Password'
+            value={matchingPassword}
+            onChange={(e) => setMatchingPassword(e.target.value)}
+            required
+            aria-invalid={validMatch ? "false" : "true"}
+            aria-describedby="confirmnote"
+            onFocus={() => setMatchingPasswordFocus(true)}
+            onBlur={() => setMatchingPasswordFocus(false)}
+        />
+        <p id="confirmnote" className={matchingPasswordFocus && !validMatch ? "instructions" : "offscreen"}>
+            <FontAwesomeIcon icon={faInfoCircle} />
+            Must match the first password input field.
         </p>
       </form>
       <button onClick={handleSignup}>Sign Up</button>
