@@ -18,10 +18,8 @@ function SignupForm() {
   const [usernameFocus, setUsernameFocus] = useState(false);
 
   const [firstName, setFirstName] = useState('');
-  const [firstNameFocus, setfirstNameFocus] = useState(false);
 
   const [lastName, setLastName] = useState('');
-  const [lastNameFocus, setlastNameFocus] = useState(false);
 
   const [email, setEmail] = useState('');
   const [validEmail, setValidEmail] = useState(false);
@@ -36,7 +34,6 @@ function SignupForm() {
   const [matchingPasswordFocus, setMatchingPasswordFocus] = useState(false);
 
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
 
   const history = useHistory();
 
@@ -125,7 +122,6 @@ function SignupForm() {
               // Handle successful signup (e.g., navigate to a different page)
               console.log('Signup successful');
               console.log(response);
-              setSuccess(true);
               setError(null); // Reset the error state
     
               // Redirect to the login page (or any other page)
