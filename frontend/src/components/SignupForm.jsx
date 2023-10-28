@@ -14,6 +14,7 @@ function SignupForm() {
 
   const [username, setUsername] = useState('');
   const [validUsername, setValidUsername] = useState(false);
+  const [availableUsername, setAvailableUsername] = useState(false);
   const [usernameFocus, setUsernameFocus] = useState(false);
 
   const [firstName, setFirstName] = useState('');
@@ -58,6 +59,21 @@ function SignupForm() {
   // validate username
   useEffect(() => {
     const result = USER_REGEX.test(username);
+
+    async function fetchData() {
+      try {
+        const response = await fetch(`http://localhost:3001/user/${username}`);
+        if (response.ok) {
+          setAvailableUsername(false);
+        } else {
+          setAvailableUsername(true);
+        }
+      } catch (error) {
+        setError('Username Already Taken.');
+      }
+    }
+    fetchData();
+    
     console.log(result);
     console.log(username);
     setValidUsername(result);
@@ -191,8 +207,8 @@ function SignupForm() {
         
         <label htmlFor='username'>
           Username:
-          <FontAwesomeIcon icon={faCheck} className={validUsername ? "valid" : "hide"} />
-          <FontAwesomeIcon icon={faTimes} className={validUsername || !username ? "hide" : "invalid"} />
+          <FontAwesomeIcon icon={faCheck} className={(validUsername && availableUsername) ? "valid" : "hide"} />
+          <FontAwesomeIcon icon={faTimes} className={(validUsername && availableUsername) || !username ? "hide" : "invalid"} />
         </label>
         <input
           type='text'
@@ -213,6 +229,10 @@ function SignupForm() {
           4 to 24 characters.<br />
           Must begin with a letter.<br />
           Letters, numbers, underscores, hyphens allowed.
+        </p>
+        <p id="uidnote" className={usernameFocus && username && !availableUsername ? "instructions" : "offscreen"}>
+          <FontAwesomeIcon icon={faInfoCircle} />
+          username is already taken.<br />
         </p>
         
         <label htmlFor="password">
