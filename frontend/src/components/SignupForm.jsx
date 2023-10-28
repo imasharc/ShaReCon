@@ -4,6 +4,7 @@ import { faCheck, faTimes, faInfoCircle } from '@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../styles/SignupForm.css'
 
+const EMAIL_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}(?:\.[A-Za-z]{2,})?$/;
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
@@ -22,6 +23,7 @@ function SignupForm() {
   const [lastNameFocus, setlastNameFocus] = useState(false);
 
   const [email, setEmail] = useState('');
+  const [validEmail, setValidEmail] = useState(false);
   const [emailFocus, setEmailFocus] = useState(false);
   
   const [password, setPassword] = useState('');
@@ -44,6 +46,14 @@ function SignupForm() {
       userRef.current.focus();
     }
   }, [])
+
+    // validate email
+    useEffect(() => {
+      const result = EMAIL_REGEX.test(email);
+      console.log(result);
+      console.log(email);
+      setValidEmail(result);
+    }, [email])
 
   // validate username
   useEffect(() => {
@@ -104,24 +114,54 @@ function SignupForm() {
     <section className='SignupForm'> 
       <h1>Sign Up</h1>
       <form>
+      <label htmlFor='username'>
+          First Name:
+          {/* <FontAwesomeIcon icon={faCheck} className={validUsername ? "valid" : "hide"} />
+          <FontAwesomeIcon icon={faTimes} className={validUsername || !username ? "hide" : "invalid"} /> */}
+        </label>
         <input
           type="text"
           placeholder="First Name"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
         />
+
+        <label htmlFor='username'>
+          Last Name:
+          {/* <FontAwesomeIcon icon={faCheck} className={validUsername ? "valid" : "hide"} />
+          <FontAwesomeIcon icon={faTimes} className={validUsername || !username ? "hide" : "invalid"} /> */}
+        </label>
         <input
           type="text"
           placeholder="Last Name"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
         />
+
+        <label htmlFor='email'>
+          Email:
+          <FontAwesomeIcon icon={faCheck} className={validEmail ? "valid" : "hide"} />
+          <FontAwesomeIcon icon={faTimes} className={validEmail || !email ? "hide" : "invalid"} />
+        </label>
         <input
-          type="text"
-          placeholder="Email"
+          type='email'
+          id='email'
+          placeholder='Email'
+          ref={userRef}
+          autoComplete='off'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
+          aria-invalid={validEmail ? 'false' : 'true'}
+          aria-describedby='emailnote'
+          onFocus={() => setEmailFocus(true)}
+          onBlur={() => setEmailFocus(false)}
         />
+        <p id="uidnote" className={emailFocus && email && !validEmail ? "instructions" : "offscreen"}>
+          <FontAwesomeIcon icon={faInfoCircle} />
+          {/* 4 to 24 characters.<br /> */}
+          Must be a valid email.<br />
+        </p>
         
         <label htmlFor='username'>
           Username:
