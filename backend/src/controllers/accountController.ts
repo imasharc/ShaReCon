@@ -2,7 +2,7 @@
 
 module.exports = {
     // Get Account by username
-    getByUsername: async (req: any, res: any) {
+    getByUsername: async (req: any, res: any) => {
         const { username } = req.params; // Use req.params to get the username from the route params
 
         await Account.getByUsername(username)
