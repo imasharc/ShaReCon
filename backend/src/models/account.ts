@@ -9,6 +9,20 @@ const Account = {
     username: '',
     password: '',
 
+    // Method to retrieve all accounts
+    getAllAccounts: async () => {
+        try {
+            const query = 'SELECT * FROM account';
+            const data = await pool.query(query);
+
+            return data.rows;
+        } catch (err) {
+            // Handle any errors that occur during the database query
+            console.error('Error in getAllAccounts:', err);
+            throw err;
+        }
+    },
+
     // Method to retrieve an account by username
     getByUsername: async (username: string) => {
         try {
