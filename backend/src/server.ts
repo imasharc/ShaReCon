@@ -57,44 +57,6 @@ app.get('/setup', async (req: any, res: any) => {
   }
 });
 
-// Return all rows from account table
-app.get('/', async (req: any, res: any) => {
-  try {
-    const data = await pool.query(`SELECT * FROM account;`)
-    res.status(200).send(data.rows)
-  } catch (err) {
-    console.log(err)
-    res.status(500).json({ "failAt": 'GET /'})
-    pool.end();
-  }
-});
-
-// // Return specific user data based on it's username
-// app.get('/user/:username', async (req: any, res: any) => {
-//   const { username } = req.params;
-
-//   try {
-//     const query = {
-//       text: `SELECT username, firstname, lastname, email FROM account WHERE username = $1`,
-//       values: [username]
-//     }
-
-//     const { rows } = await pool.query(query);
-
-//     if (rows.length === 0) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     const user = rows[0];
-//     res.status(200).json(user);
-//   } catch (err) {
-//     console.log(err)
-//     res.status(500).json({ message: "Internal server error" })
-//     console.log({ "failAt": 'GET /'})
-//     // pool.end();
-//   }
-// });
-
 // Defines a simple endpoint that returns text
 app.get('/api/text', (req: any, res: any) => {
   res.status(200).json({ "status": 'success!!'})
