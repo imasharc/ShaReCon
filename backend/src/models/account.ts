@@ -1,4 +1,5 @@
 ﻿const pool = require('../db');
+const bcryptjs = require('bcryptjs');
 
 const Account = {
     // properties
@@ -45,7 +46,32 @@ const Account = {
             console.error('Error in getByUsername:', err);
             throw err;
         }
-    }
+    },
+
+    updateByUsername: async (username: string, newUsername: string, firstName: string, lastName: string, email: string, password: string) => {
+        try {
+            const hashedPassword = await bcryptjs.hash(password, 10);
+
+            const query = {
+                text: `UPDATE account
+                    SET username = $2, firstname = $3, lastname = $4, email = $5, password = $6
+                    WHERE username = $1
+                    RETURNING *`,
+                values: [username, newUsername, firstName, lastName, email, hashedPassword],
+            };
+
+            const data = await pool.query(query);
+
+            if (data.rows.length > 0) {
+                return data.rows[0];
+            } else {
+                return null;
+            }
+        } catch (err) {
+            console.error('Error in updateByUsername:', err);
+            throw err;
+        }
+    },
 };
 
 module.exports = Account;
