@@ -8,6 +8,8 @@ var pool = require('./db')
 const app = express();
 const port = 3001;
 
+const accountRouter = require('./routes/accountRoutes');
+
 app.use(cors({ origin: 'http://localhost:3000'}));
 app.use(express.json());
 app.use(bodyParser.json());
@@ -21,6 +23,9 @@ app.use(session({
     maxAge: 24 * 60 * 60 * 1000
   }
 }))
+
+// CONTROLLER ROUTES
+app.use(accountRouter);
 
 /**
  * ENDPOINTS:
@@ -64,31 +69,31 @@ app.get('/', async (req: any, res: any) => {
   }
 });
 
-// Return specific user data based on it's username
-app.get('/user/:username', async (req: any, res: any) => {
-  const { username } = req.params;
+// // Return specific user data based on it's username
+// app.get('/user/:username', async (req: any, res: any) => {
+//   const { username } = req.params;
 
-  try {
-    const query = {
-      text: `SELECT username, firstname, lastname, email FROM account WHERE username = $1`,
-      values: [username]
-    }
+//   try {
+//     const query = {
+//       text: `SELECT username, firstname, lastname, email FROM account WHERE username = $1`,
+//       values: [username]
+//     }
 
-    const { rows } = await pool.query(query);
+//     const { rows } = await pool.query(query);
 
-    if (rows.length === 0) {
-      return res.status(404).json({ message: "User not found" });
-    }
+//     if (rows.length === 0) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
 
-    const user = rows[0];
-    res.status(200).json(user);
-  } catch (err) {
-    console.log(err)
-    res.status(500).json({ message: "Internal server error" })
-    console.log({ "failAt": 'GET /'})
-    // pool.end();
-  }
-});
+//     const user = rows[0];
+//     res.status(200).json(user);
+//   } catch (err) {
+//     console.log(err)
+//     res.status(500).json({ message: "Internal server error" })
+//     console.log({ "failAt": 'GET /'})
+//     // pool.end();
+//   }
+// });
 
 // Defines a simple endpoint that returns text
 app.get('/api/text', (req: any, res: any) => {
