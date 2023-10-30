@@ -8,8 +8,6 @@ var pool = require('./db')
 const app = express();
 const port = 3001;
 
-const accountRouter = require('./routes/accountRoutes');
-
 app.use(cors({ origin: 'http://localhost:3000'}));
 app.use(express.json());
 app.use(bodyParser.json());
@@ -25,42 +23,8 @@ app.use(session({
 }))
 
 // CONTROLLER ROUTES
-app.use(accountRouter);
-
-/**
- * ENDPOINTS:
- * 1. GET /setup -> Setting up a single table in postgres
- * 2. GET / -> Return all rows from account table
- * 3. GET /user/:username -> Return specific user data based on it's username
- * 4. GET /api/text -> Defines a simple endpoint that returns text
- * 5. POST /login -> API endpoint for user login
- * 6. GET /protected -> Defines a protected route
- * 7. POST /signup -> API endpoint for account registration
- */
-// Setting up a single table in postgres
-app.get('/setup', async (req: any, res: any) => {
-  try {
-    await pool.query(`CREATE TABLE account
-    (
-      id SERIAL PRIMARY KEY,
-      username VARCHAR(50),
-      firstname VARCHAR(50),
-      lastname VARCHAR(50),
-      email VARCHAR(50),
-      password VARCHAR(100)
-      );`)
-    res.status(200).send({ message: `Successfully created table user`})
-  } catch (err) {
-    console.log(err)
-    res.status(500).json({ "failAt": 'GET /setup'})
-    pool.end();
-  }
-});
-
-// Defines a simple endpoint that returns text
-app.get('/api/text', (req: any, res: any) => {
-  res.status(200).json({ "status": 'success!!'})
-});
+const accountRouter = require('./routes/accountRoutes');
+app.use('/api/users', accountRouter);
 
 // API endpoint for user login
 app.post('/login', async (req: any, res: any) => {
