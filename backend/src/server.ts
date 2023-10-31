@@ -22,10 +22,6 @@ app.use(session({
   }
 }))
 
-const indexRouter = require("./routes/index");
-app.use('/', indexRouter);
-
-
 // CONTROLLER ROUTES
 const accountApiRouter = require('./routes/api/accountApiRoutes');
 app.use('/api/users', accountApiRouter);
