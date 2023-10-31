@@ -82,12 +82,32 @@ const Account = {
 
     updateByUsername: async (username: string, newUsername: string, firstName: string, lastName: string, email: string, password: string) => {
         try {
+            // Fetch the old data for the user
+            const oldData = await Account.getByUsername(username);
 
+            if (!oldData) {
+                return null; // Handle the case where the user does not exist
+            }
+
+            // Compare the old data with the new data
+            const updatedData = {
+                username: newUsername || oldData.username,
+                firstName: firstName || oldData.firstName,
+                lastName: lastName || oldData.lastName,
+                email: email || oldData.email,
+                password: password || password,
+            };
+
+            // Hash the new password if provided, otherwise, use the old hashed password
+            const hashedPassword = updatedData.password ? await bcryptjs.hash(password, 10) : oldData.password;
+
+            console.log(password);
             const query = {
                 text: `UPDATE account
                     SET username = $2, firstname = $3, lastname = $4, email = $5, password = $6
                     WHERE username = $1
                     RETURNING *`,
+                values: [username, updatedData.username, updatedData.firstName, updatedData.lastName, updatedData.email, hashedPassword],
             };
 
             const data = await pool.query(query);
