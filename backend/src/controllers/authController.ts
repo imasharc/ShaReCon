@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs'); // For password hashing and comparison
 const express = require('express')
 const cookieParser = require('cookie-parser');
 const app = express();
-const createTokens = require('../utils/JWT')
+const { createTokens, validateToken } = require('../utils/JWT')
 
 app.use(express.json());
 app.use(cookieParser());

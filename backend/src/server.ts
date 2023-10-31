@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs')
 const session = require('express-session')
 const cookieParser = require('cookie-parser');
 var pool = require('./db')
+const { validateToken } = require('./utils/JWT')
 const app = express();
 const port = 3001;
 
@@ -36,12 +37,8 @@ app.get('/protected', (req: any, res: any) => {
 });
 
 // Endpoint for checking active session
-app.get('/check-session', (req: any, res: any) => {
-  if (req.session.username) {
-    res.status(200).json({ valid: true, username: req.session.username });
-  } else {
-    res.status(401).json({ valid: false });
-  }
+app.get('/check-session', validateToken, (req: any, res: any) => {
+  res.json('check-session');
 });
 
 app.listen(port, () => {
