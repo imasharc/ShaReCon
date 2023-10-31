@@ -3,18 +3,18 @@ import { useParams, useHistory } from 'react-router-dom';
 
 function AccountPanel() {
   const [userData, setUserData] = useState({
-    username: '',
     firstName: '',
     lastName: '',
+    username: '',
     email: '',
   });
   const { username } = useParams();
   const history = useHistory(); // Initialize useHistory
 
   // Function to fetch user data
-  const fetchUserData = () => {
+  const fetchUserData = async () => {
     // Make an API request to fetch user data
-    fetch(`http://localhost:3001/api/users/${username}`)
+    await fetch(`http://localhost:3001/api/users/${username}`)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -23,8 +23,14 @@ function AccountPanel() {
         }
       })
       .then((data) => {
-        console.log(data.account); // Update the state with fetched user data
-        setUserData(data.account); // Update the state with fetched user data
+        console.log(data); // Update the state with fetched user data
+        setUserData({
+          firstName: data.account.firstname,
+          lastName: data.account.lastname,
+          username: data.account.username,
+          email: data.account.email,
+        }); // Update the state with fetched user data
+        console.log(userData);
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -52,26 +58,14 @@ function AccountPanel() {
         });
     });
 
-  useEffect(() => {
-    // Use a setTimeout to wait for userData to be fetched
-    const delay = 1000; // 1 second (adjust as needed)
-    const timer = setTimeout(() => {
-      // Actions that should occur after userData is fetched
-      // For example, you can access userData.firstName here
-      console.log('Fetched user data:', userData);
-    }, delay);
-
-    return () => clearTimeout(timer); // Cleanup on unmount
-  }, [userData]); // Include userData in the dependency array
-
   return (
     <div>
       <h2>Account Settings</h2>
       <div>
         <h3>Profile</h3>
         <p>Username: {userData.username}</p>
-        <p>First Name: {userData.firstname}</p>
-        <p>Last Name: {userData.lastname}</p>
+        <p>First Name: {userData.firstName}</p>
+        <p>Last Name: {userData.lastName}</p>
         <p>Email: {userData.email}</p>
       </div>
       <div>

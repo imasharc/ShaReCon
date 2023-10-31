@@ -45,13 +45,13 @@ function SignupForm() {
     }
   }, [])
 
-    // validate email
-    useEffect(() => {
-      const result = EMAIL_REGEX.test(email);
-      console.log(result);
-      console.log(email);
-      setValidEmail(result);
-    }, [email])
+  // validate email
+  useEffect(() => {
+    const result = EMAIL_REGEX.test(email);
+    console.log(result);
+    console.log(email);
+    setValidEmail(result);
+  }, [email])
 
   // validate username
   useEffect(() => {
@@ -59,7 +59,9 @@ function SignupForm() {
 
     async function fetchData() {
       try {
-        const response = await fetch(`http://localhost:3001/user/${username}`);
+        const response = await fetch(`http://localhost:3001/api/users/${username}`);
+        console.log(`firstname: ${firstName}, lastname: ${lastName}, email: ${email}, username: ${username}, password: ${password}`);
+
         if (response.ok) {
           setAvailableUsername(false);
         } else {
@@ -115,13 +117,22 @@ function SignupForm() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ username, firstName, lastName, email, password }),
+          body: JSON.stringify({
+            "account": {
+                "firstname": firstName,
+                "lastname": lastName,
+                "email": email,
+                "username": username,
+                "password": password
+            }
+        }),
         })
           .then((response) => {
+            
             if (response.ok) {
               // Handle successful signup (e.g., navigate to a different page)
+              console.log(`firstname: ${firstName}, lastname: ${lastName}, email: ${email}, username: ${username}, password: ${password}`);
               console.log('Signup successful');
-              console.log(response);
               setError(null); // Reset the error state
     
               // Redirect to the login page (or any other page)
