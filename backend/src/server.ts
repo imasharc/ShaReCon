@@ -23,8 +23,8 @@ app.use(session({
 }))
 
 // CONTROLLER ROUTES
-const accountRouter = require('./routes/api/accountRoutes');
-app.use('/api/users', accountRouter);
+const accountApiRouter = require('./routes/api/accountApiRoutes');
+app.use('/api/users', accountApiRouter);
 
 // API endpoint for user login
 app.post('/login', async (req: any, res: any) => {
