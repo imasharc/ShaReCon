@@ -44,51 +44,6 @@ app.get('/check-session', (req: any, res: any) => {
   }
 });
 
-// API endpoint for account registration
-app.post('/signup', async (req: any, res: any) => {
-  const formData = req.body;
-  const { username, firstName, lastName, email, password } = req.body;
-
-    // Check if the username already exists in the database
-    const checkUsernameQuery = {
-      text: 'SELECT username FROM account WHERE username = $1',
-      values: [username],
-    };
-
-  // Log the form data
-  console.log('Received form data:', formData);
-
-  if (Object.keys(formData).length === 0) {
-    return res.status(400).json({ error: 'Form data is empty' });
-  }
-
-  try {
-    const usernameExists = await pool.query(checkUsernameQuery);
-    
-    if (usernameExists.rows.length > 0) {
-      return res.status(409).json({ error: 'Username already exists' });
-    }
-    
-    // Hash the user's password before storing it in the database
-    const hashedPassword = await bcrypt.hash(password, 10);
-    
-    const query = {
-      text:
-        'INSERT INTO account (username, firstname, lastname, email, password) VALUES ($1, $2, $3, $4, $5)',
-      values: [username, firstName, lastName, email, hashedPassword],
-    };
-
-    await pool.query(query);
-
-    // If form data is not empty, return a 200 OK response
-    res.status(200).json({ message: 'Form data received and processed successfully' });
-    console.log({ username: username, firstName: firstName, lastName: lastName, email: email, hashedPassword: hashedPassword, password: password })
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Registration failed');
-  }
-});
-
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });

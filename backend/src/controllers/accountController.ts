@@ -1,17 +1,17 @@
 ﻿const Account = require('../models/account');
 
 module.exports = {
-        // Get all accounts
-        getAllAccounts: async (req: any, res: any) => {
-            try {
-                const accounts = await Account.getAllAccounts();
-    
-                res.status(200).json({ accounts });
-            } catch (err) {
-                console.error(err);
-                res.status(500).json({ error: 'Internal server error' });
-            }
-        },
+    // Get all accounts
+    getAllAccounts: async (req: any, res: any) => {
+        try {
+            const accounts = await Account.getAllAccounts();
+
+            res.status(200).json({ accounts });
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    },
 
     // Get Account by username
     getByUsername: async (req: any, res: any) => {
@@ -31,31 +31,55 @@ module.exports = {
         }
     },
 
-        // Get Account by username
-        loginByUsername: async (username: string) => {
-    
-            try {
-                const data = await Account.getByUsername(username);
-    
-                if (data) {
-                    return data
-                } else {
-                    return null;
-                }
-            } catch (err) {
-                console.error(err);
+    // Log the user in
+    loginByUsername: async (username: string) => {
+
+        try {
+            const data = await Account.getByUsername(username);
+
+            if (data) {
+                return data
+            } else {
+                return null;
             }
-        },
+        } catch (err) {
+            console.error(err);
+        }
+    },
+
+    // Sign the user up
+    signup: async (username: string, firstName: string, lastName: string, email: string, password: string) => {
+
+        try {
+            const data = await Account.getByUsername(username);
+
+            if(data) {
+                return console.error('Username already exists'); 
+            }
+
+            const newData = await Account.createNew(username, firstName, lastName, email, password);
+
+            if (newData) {
+                return newData;
+            } else {
+                return null;
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    },
 
     createNew: async (req: any, res: any) => {
         // const { username, firstName, lastName, email, password } = req.body
         const reqNew = {
-            username: req.body.account.username,
             firstName: req.body.account.firstname,
             lastName: req.body.account.lastname,
             email: req.body.account.email,
+            username: req.body.account.username,
             password: req.body.account.password,
         }
+        console.log(req.body);
+        console.log(reqNew);
 
         try {
             // Create a new account, checking if the username is available
