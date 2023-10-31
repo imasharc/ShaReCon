@@ -1,5 +1,12 @@
 ﻿const accountController = require('./accountController'); // Adjust the path as needed
 const bcrypt = require('bcryptjs'); // For password hashing and comparison
+const express = require('express')
+const cookieParser = require('cookie-parser');
+const app = express();
+const createTokens = require('../utils/JWT')
+
+app.use(express.json());
+app.use(cookieParser());
 
 const AuthController = {
     login: async (req: any, res: any) => {
@@ -17,6 +24,11 @@ const AuthController = {
         const passwordsMatch = await bcrypt.compare(req.body.account.password, account.password);
   
         if (passwordsMatch) {
+            const accessToken = createTokens(account);
+            res.cookie('accessToken', accessToken, {
+                maxAge: 60 * 60 * 24 * 30 * 1000
+            });
+
           // Authentication successful
           return res.status(200).json({ message: 'Login successful' });
         } else {
