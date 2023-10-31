@@ -123,6 +123,41 @@ const Account = {
         }
     },
 
+    deleteByUsernameAndPassword: async (username: string, password: string) => {
+        try {
+            // Fetch the account with the provided username
+            const account = await Account.getByUsername(username);
+
+            // If the account does not exist, return null
+            if (!account) {
+                return { message: 'Provided account does not exist' };
+            }
+
+            // Compare the provided password with the hashed password in the account
+            const isPasswordValid = await bcryptjs.compare(password, account.password);
+
+
+            console.log(password);
+            console.log(await bcryptjs.hash(password, 10));
+            console.log(account.password);
+            console.log(isPasswordValid);
+            // If the passwords match, proceed to delete the account
+            if (isPasswordValid) {
+                const deleteQuery = {
+                    text: 'DELETE FROM account WHERE username = $1',
+                    values: [username],
+                };
+                await pool.query(deleteQuery);
+                return { message: 'Account deleted successfully' };
+            } else {
+                // Password is incorrect, return null
+                return null;
+            }
+        } catch (err) {
+            console.error('Error in deleteByUsernameAndPassword:', err);
+            throw err;
+        }
+    },
 };
 
 module.exports = Account;
