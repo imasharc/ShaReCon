@@ -46,13 +46,18 @@ function LoginForm() {
       setUsername('');
       setPassword('');
       // Send a POST request to your '/login' endpoint with the username and password
-      fetch('http://localhost:3001/login', {
+      fetch(`http://localhost:3001/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         withCredentials: true,
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({
+          "account": {
+              "username": username,
+              "password": password
+          }
+      }),
       })
         .then((response) => {
           if (response.ok) {

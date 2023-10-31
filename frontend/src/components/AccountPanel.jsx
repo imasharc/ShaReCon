@@ -14,7 +14,7 @@ function AccountPanel() {
   // Function to fetch user data
   const fetchUserData = () => {
     // Make an API request to fetch user data
-    fetch(`http://localhost:3001/user/${username}`)
+    fetch(`http://localhost:3001/api/users/${username}`)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -23,7 +23,8 @@ function AccountPanel() {
         }
       })
       .then((data) => {
-        setUserData(data); // Update the state with fetched user data
+        console.log(data.account); // Update the state with fetched user data
+        setUserData(data.account); // Update the state with fetched user data
       })
       .catch((error) => {
         console.error('Error:', error);
