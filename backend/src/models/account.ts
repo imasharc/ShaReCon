@@ -48,16 +48,46 @@ const Account = {
         }
     },
 
+    createNew: async (username: string, firstName: string, lastName: string, email: string, password: string) => {
+        try {
+            // Check if the username is already taken
+            const existingAccount = await Account.getByUsername(username);
+            if (existingAccount) {
+                return { error: 'Username is already taken' };
+            }
+
+            // Hash the password before inserting it into the database
+            const hashedPassword = await bcryptjs.hash(password, 10);
+
+            // Insert a new account record into the database
+            const query = {
+                text: `INSERT INTO account(username, firstName, lastName, email, password)
+                    VALUES($1, $2, $3, $4, $5)
+                    RETURNING *`,
+                values: [username, firstName, lastName, email, hashedPassword],
+            };
+
+            const data = await pool.query(query);
+
+            if (data.rows.length > 0) {
+                return data.rows[0];
+            } else {
+                return null;
+            }
+        } catch (err) {
+            console.error('Error in createNew:', err);
+            throw err;
+        }
+    },
+
     updateByUsername: async (username: string, newUsername: string, firstName: string, lastName: string, email: string, password: string) => {
         try {
-            const hashedPassword = await bcryptjs.hash(password, 10);
 
             const query = {
                 text: `UPDATE account
                     SET username = $2, firstname = $3, lastname = $4, email = $5, password = $6
                     WHERE username = $1
                     RETURNING *`,
-                values: [username, newUsername, firstName, lastName, email, hashedPassword],
             };
 
             const data = await pool.query(query);
@@ -72,6 +102,7 @@ const Account = {
             throw err;
         }
     },
+
 };
 
 module.exports = Account;
