@@ -31,6 +31,22 @@ module.exports = {
         }
     },
 
+        // Get Account by username
+        loginByUsername: async (username: string) => {
+    
+            try {
+                const data = await Account.getByUsername(username);
+    
+                if (data) {
+                    return data
+                } else {
+                    return null;
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        },
+
     createNew: async (req: any, res: any) => {
         // const { username, firstName, lastName, email, password } = req.body
         const reqNew = {

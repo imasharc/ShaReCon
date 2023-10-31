@@ -22,43 +22,17 @@ app.use(session({
   }
 }))
 
+const indexRouter = require("./routes/index");
+app.use('/', indexRouter);
+
+
 // CONTROLLER ROUTES
 const accountApiRouter = require('./routes/api/accountApiRoutes');
 app.use('/api/users', accountApiRouter);
 
-// API endpoint for user login
-app.post('/login', async (req: any, res: any) => {
-  const { username, password } = req.body; // Parse the user input from the JSON request body
-
-  // Query the database to retrieve password for the user
-  const query = {
-    text: `SELECT * FROM account WHERE username = $1`,
-    values: [username]
-  }
-
-  try {
-    const result = await pool.query(query);
-    if (result.rows.length === 0) {
-      return res.status(401).send('Invalid username or password');
-    }
-
-    const storedPassword = result.rows[0].password;
-    const passwordsMatch = await bcrypt.compare(password, storedPassword);
-
-    if (passwordsMatch) {
-      // Authentication successful
-      req.session.username = username;
-      console.log({username: username, password: password, req_session_username: req.session.username })
-      return res.status(200).json({ message: 'Login successful', username: req.session.username });
-    } else {
-      // Authentication failed
-      return res.status(401).json({ message: 'Login failed' });
-    }
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send('Internal server error');
-  }
-});
+const authRoutes = require('./routes/authRoutes'); // Import the AuthController
+// Auth endpoint for user login
+app.use('/', authRoutes);
 
 // Defines a protected route
 app.get('/protected', (req: any, res: any) => {
