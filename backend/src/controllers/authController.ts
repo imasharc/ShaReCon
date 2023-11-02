@@ -24,20 +24,22 @@ const AuthController = {
         const passwordsMatch = await bcrypt.compare(req.body.account.password, account.password);
   
         if (passwordsMatch) {
-            const accessToken = createTokens(account);
-            res.cookie('accessToken', accessToken, {
-                maxAge: 60 * 60 * 24 * 30 * 1000
+            const [accessToken, refreshToken] = createTokens(account);
+            res.cookie('refreshToken', refreshToken, {
+              httpOnly: true,
+              maxAge: 60 * 60 * 24 * 30 * 1000
             });
+            res.json({ accessToken });
 
           // Authentication successful
           return res.status(200).json({ auth: true, token: accessToken, result: account });
         } else {
           // Authentication failed
-          return res.status(401).json({ message: 'Invalid username or password' });
+          return res.status(500).json({ auth: false, message: "no user exists" });
         }
       } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ auth: false, message: "no server response" });
       }
     },
 

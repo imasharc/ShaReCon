@@ -4,16 +4,19 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 
 const createTokens = (account: any) => {
-    const accessToken = sign({
-        username: account.username, id: account.id
-    },
+    const accessToken = sign(
+        { "username": account.username, id: account.id },
         process.env.ACCESS_TOKEN_SECRET,
-        {
-            expiresIn: 300,
-        }
-        );
+        { expiresIn: "30s" }
+    );
+    
+    const refreshToken = sign(
+        { "username": account.username, id: account.id },
+        process.env.REFRESH_TOKEN_SECRET,
+        { expiresIn: "1d" }
+    );
 
-        return accessToken;
+        return [accessToken, refreshToken];
 };
 
 const validateToken = (req: any, res: any, next: any) => {
