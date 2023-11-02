@@ -4,9 +4,13 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 
 const createTokens = (account: any) => {
-    const accessToken = sign(
-        { username: account.username, id: account.id },
-        process.env.ACCESS_TOKEN_SECRET
+    const accessToken = sign({
+        username: account.username, id: account.id
+    },
+        process.env.ACCESS_TOKEN_SECRET,
+        {
+            expiresIn: 300,
+        }
         );
 
         return accessToken;
