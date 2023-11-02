@@ -43,21 +43,6 @@ function AccountPanel() {
     fetchUserData();
   }, []);
 
-    // Check if the user session is active
-    useEffect(()=> {
-      fetch(`http://localhost:3001/check-session`)
-        .then((response) => {
-          if (response.ok) {
-            return response.json(response);
-          }
-        })
-        .catch((error) => {
-          history.push(`/login`);
-          console.error('Error:', error);
-          // Handle the error (e.g., display an error message)
-        });
-    });
-
   return (
     <div>
       <h2>Account Settings</h2>
