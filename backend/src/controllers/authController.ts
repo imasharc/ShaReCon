@@ -30,7 +30,7 @@ const AuthController = {
             });
 
           // Authentication successful
-          return res.status(200).json({ message: 'Login successful' });
+          return res.status(200).json({ auth: true, token: accessToken, result: account });
         } else {
           // Authentication failed
           return res.status(401).json({ message: 'Invalid username or password' });

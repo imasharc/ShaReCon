@@ -32,13 +32,13 @@ const authRoutes = require('./routes/authRoutes'); // Import the AuthController
 app.use('/', authRoutes);
 
 // Defines a protected route
-app.get('/protected', (req: any, res: any) => {
-  res.json({ message: 'You have access to this protected resource.' });
+app.get('/isUserAuth', validateToken, (req: any, res: any) => {
+  res.send("You are authenticated");
 });
 
 // Endpoint for checking active session
 app.get('/check-session', validateToken, (req: any, res: any) => {
-  res.json('check-session');
+  res.json('session active');
 });
 
 app.listen(port, () => {
