@@ -9,6 +9,7 @@ const Account = {
     email: '',
     username: '',
     password: '',
+    token: '',
 
     // Method to retrieve all accounts
     getAllAccounts: async () => {
@@ -48,7 +49,7 @@ const Account = {
         }
     },
 
-    createNew: async (username: string, firstName: string, lastName: string, email: string, password: string) => {
+    createNew: async (username: string, firstName: string, lastName: string, email: string, password: string, token: string) => {
         try {
             // Check if the username is already taken
             const existingAccount = await Account.getByUsername(username);
@@ -61,10 +62,10 @@ const Account = {
 
             // Insert a new account record into the database
             const query = {
-                text: `INSERT INTO account(username, firstName, lastName, email, password)
-                    VALUES($1, $2, $3, $4, $5)
+                text: `INSERT INTO account(username, firstName, lastName, email, password, token)
+                    VALUES($1, $2, $3, $4, $5, $6)
                     RETURNING *`,
-                values: [username, firstName, lastName, email, hashedPassword],
+                values: [username, firstName, lastName, email, hashedPassword, token],
             };
 
             const data = await pool.query(query);
@@ -80,7 +81,7 @@ const Account = {
         }
     },
 
-    updateByUsername: async (username: string, newUsername: string, firstName: string, lastName: string, email: string, password: string) => {
+    updateByUsername: async (username: string, newUsername: string, firstName: string, lastName: string, email: string, password: string, token: string) => {
         try {
             // Fetch the old data for the user
             const oldData = await Account.getByUsername(username);
@@ -104,10 +105,40 @@ const Account = {
             console.log(password);
             const query = {
                 text: `UPDATE account
-                    SET username = $2, firstname = $3, lastname = $4, email = $5, password = $6
+                    SET username = $2, firstname = $3, lastname = $4, email = $5, password = $6, token = $7
                     WHERE username = $1
                     RETURNING *`,
-                values: [username, updatedData.username, updatedData.firstName, updatedData.lastName, updatedData.email, hashedPassword],
+                values: [username, updatedData.username, updatedData.firstName, updatedData.lastName, updatedData.email, hashedPassword, token],
+            };
+
+            const data = await pool.query(query);
+
+            if (data.rows.length > 0) {
+                return data.rows[0];
+            } else {
+                return null;
+            }
+        } catch (err) {
+            console.error('Error in updateByUsername:', err);
+            throw err;
+        }
+    },
+
+    updateAccessToken: async (username: string, token: string) => {
+        try {
+            // Fetch the old data for the user
+            const oldData = await Account.getByUsername(username);
+
+            if (!oldData) {
+                return null; // Handle the case where the user does not exist
+            }
+
+            const query = {
+                text: `UPDATE account
+                    SET token = $2
+                    WHERE username = $1
+                    RETURNING *`,
+                values: [username, token],
             };
 
             const data = await pool.query(query);

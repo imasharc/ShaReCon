@@ -1,4 +1,5 @@
 ﻿const Account = require('../models/account');
+const { createTokens } = require('../utils/JWT')
 
 module.exports = {
     // Get all accounts
@@ -48,7 +49,7 @@ module.exports = {
     },
 
     // Sign the user up
-    signup: async (username: string, firstName: string, lastName: string, email: string, password: string) => {
+    signup: async (username: string, firstName: string, lastName: string, email: string, password: string, token: string) => {
 
         try {
             const data = await Account.getByUsername(username);
@@ -57,7 +58,7 @@ module.exports = {
                 return console.error('Username already exists'); 
             }
 
-            const newData = await Account.createNew(username, firstName, lastName, email, password);
+            const newData = await Account.createNew(username, firstName, lastName, email, password, token);
 
             if (newData) {
                 return newData;
@@ -81,9 +82,12 @@ module.exports = {
         console.log(req.body);
         console.log(reqNew);
 
+        const accessToken = createTokens(reqNew.username);
+        console.log(accessToken);
+
         try {
             // Create a new account, checking if the username is available
-            const newAccount = await Account.createNew(reqNew.username, reqNew.firstName, reqNew.lastName, reqNew.email, reqNew.password);
+            const newAccount = await Account.createNew(reqNew.username, reqNew.firstName, reqNew.lastName, reqNew.email, reqNew.password, accessToken);
 
             if (newAccount && !newAccount.error) {
                 res.status(201).json({ message: 'Account created successfully', account: newAccount });

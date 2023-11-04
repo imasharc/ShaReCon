@@ -3,24 +3,20 @@ const account = require('../models/account')
 import * as dotenv from 'dotenv'
 dotenv.config()
 
-const createTokens = (account: any) => {
+const createTokens = (username: any) => {
     const accessToken = sign(
-        { "username": account.username, id: account.id },
+        { user_id: username },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "30s" }
+        { expiresIn: "2h" }
     );
     
-    const refreshToken = sign(
-        { "username": account.username, id: account.id },
-        process.env.REFRESH_TOKEN_SECRET,
-        { expiresIn: "1d" }
-    );
-
-        return [accessToken, refreshToken];
+        return accessToken;
 };
 
 const validateToken = (req: any, res: any, next: any) => {
-    const accessToken = req.cookies['accessToken'];
+    const accessToken = req.cookies['jwt'];
+    console.log(accessToken);
+    console.log(req.headers);
 
     if (!accessToken) {
         return res.status(400).json({ error: "User Not Authenticated "});
