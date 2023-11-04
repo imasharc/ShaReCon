@@ -30,7 +30,10 @@ function AccountPanel() {
           username: data.account.username,
           email: data.account.email,
         }); // Update the state with fetched user data
-        console.log(userData);
+        // console.log(userData);
+        if (data.account.token) {
+          console.log("This shit works!");
+        }
       })
       .catch((error) => {
         console.error('Error:', error);

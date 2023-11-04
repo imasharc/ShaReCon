@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom'; // Import the Link component
+import { CookiesProvider, useCookies } from "react-cookie";
 import '../styles/LoginForm.css'
 
 function LoginForm() {
@@ -10,6 +11,8 @@ function LoginForm() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const history = useHistory(); // Initialize useHistory
+
+  const [cookies, setCookie] = useCookies(["token"]);
   
   // set the focus when the component loads
   useEffect(() => {
@@ -51,7 +54,7 @@ function LoginForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        withCredentials: true,
+        withCredentials: false,
         body: JSON.stringify({
           "account": {
               "username": username,
@@ -61,21 +64,34 @@ function LoginForm() {
       })
         .then((response) => {
           if (response.ok) {
-            // Handle successful login
-            console.log('Login successful');
-            setError(null); // Reset the error state on success
-            
-            // Redirect to the account page with the username
-            history.push(`/account/${username}`);
+            // Assuming the response data is in JSON format, you can parse it
+            return response.json();
           } else {
             // Handle login error and set error message
             setError('Login or password incorrect');
           }
         })
-        // .catch((error) => {
-        //   console.error('Error:', error);
-        //   setError('An error occurred while logging in');
-        // });
+        .then((data) => {
+          // 'data' will contain the response data, which includes "auth" and "token"
+          console.log(data);
+
+          // Now you can access the "auth" and "token" properties
+          const { auth, token, result } = data;
+
+          // Handle the data as needed
+          if (auth) {
+            // Authentication was successful, and you can use the 'token'
+            // Set the 'token' in your React state or cookies
+            setCookie("token", token, { path: "/", maxAge: 30 });
+            console.log(cookies.token);
+
+            history.push(`/account/${username}`)
+          } else {
+            // Authentication failed
+            // Handle the error or show a message to the user
+            console.log("Login failed");
+          }
+        })
     } catch (err) {
       if (!err?.response) {
         setError('No Server Response');
