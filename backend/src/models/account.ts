@@ -49,6 +49,32 @@ const Account = {
         }
     },
 
+    // Method to retrieve an account by token
+    getByToken: async (token: string) => {
+        try {
+            const query = {
+                text: 'SELECT * FROM account WHERE token = $1',
+                values: [token],
+            };
+
+            const data = await pool.query(query);
+
+            if (data.rows.length > 0) {
+                // Return the first matching account as a JSON object
+                console.log("account: " + query.values)
+                console.log("account: " + JSON.stringify(data.rows[0]))
+                return data.rows[0];
+            } else {
+                // If no matching account is found, return null
+                return null;
+            }
+        } catch (err) {
+            // Handle any errors that occur during the database query
+            console.error('Error in getByToken:', err);
+            throw err;
+        }
+    },
+
     createNew: async (username: string, firstName: string, lastName: string, email: string, password: string, token: string) => {
         try {
             // Check if the username is already taken

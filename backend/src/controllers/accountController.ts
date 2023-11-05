@@ -32,6 +32,29 @@ module.exports = {
         }
     },
 
+    // Get Account by token
+    getByToken: async (req: any, res: any) => {
+        const { token } = req.params; // Use req.params to get the username from the route params
+
+        try {
+            const data = await Account.getByToken(token);
+
+            if (data) {
+                console.log("accountController: " + token)
+                console.log("accountController: " + JSON.stringify(data))
+
+                if (data.token === token) {
+                    res.status(200).json({ account: data });
+                }
+            } else {
+                res.status(404).json({ message: 'Account not found' });
+            }
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    },
+
     // Log the user in
     loginByUsername: async (username: string) => {
 
