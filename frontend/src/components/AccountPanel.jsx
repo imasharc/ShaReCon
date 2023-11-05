@@ -23,7 +23,7 @@ function AccountPanel() {
         }
       })
       .then((data) => {
-        console.log(data); // Update the state with fetched user data
+        // console.log(data); // Update the state with fetched user data
         setUserData({
           firstName: data.account.firstname,
           lastName: data.account.lastname,
@@ -32,7 +32,7 @@ function AccountPanel() {
         }); // Update the state with fetched user data
         // console.log(userData);
         if (data.account.token) {
-          console.log("This shit works!");
+          // console.log("This shit works!");
         }
       })
       .catch((error) => {

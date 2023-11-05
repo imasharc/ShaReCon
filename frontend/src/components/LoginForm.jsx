@@ -27,21 +27,6 @@ function LoginForm() {
     setError('');
   }, [username, password])
 
-  // Check if the user session is active
-  // useEffect(()=> {
-  //   fetch(`http://localhost:3001/check-session`)
-  //     .then((response) => {
-  //       if (response.data.valid) {
-  //         return response.json(response.data.req.session.username);
-  //       } 
-  //     })
-  //     .catch((error) => {
-  //       history.push(`/login`);
-  //       console.error('Error:', error);
-  //       // Handle the error (e.g., display an error message)
-  //     });
-  // });
-
   const handleLogin = async (e) => {
     e.preventDefault();
     
@@ -73,7 +58,7 @@ function LoginForm() {
         })
         .then((data) => {
           // 'data' will contain the response data, which includes "auth" and "token"
-          console.log(data);
+          // console.log(data);
 
           // Now you can access the "auth" and "token" properties
           const { auth, token, result } = data;
@@ -82,10 +67,10 @@ function LoginForm() {
           if (auth) {
             // Authentication was successful, and you can use the 'token'
             // Set the 'token' in your React state or cookies
-            setCookie("token", token, { path: "/", maxAge: 30 });
-            console.log(cookies.token);
+            setCookie("token", token, { path: "/", maxAge: 60 });
+            // console.log(cookies);
 
-            history.push(`/account/${username}`)
+            history.push(`/account/${username}`);
           } else {
             // Authentication failed
             // Handle the error or show a message to the user
