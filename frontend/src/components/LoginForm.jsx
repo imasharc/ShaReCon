@@ -59,19 +59,20 @@ function LoginForm() {
         .then((data) => {
           // 'data' will contain the response data, which includes "auth" and "token"
           // console.log(data);
-
-          // Now you can access the "auth" and "token" properties
-          const { auth, token, result } = data;
-
-          // Handle the data as needed
-          if (auth) {
-            // Authentication was successful, and you can use the 'token'
-            // Set the 'token' in your React state or cookies
-            setCookie("token", token, { path: "/", maxAge: 60 });
-            // console.log(cookies);
-
-            history.push(`/account/${username}`);
+          if(data) {
+            // Now you can access the "auth" and "token" properties
+            const { auth, token, result } = data;
+            // Handle the data as needed
+            if (auth) {
+              // Authentication was successful, and you can use the 'token'
+              // Set the 'token' in your React state or cookies
+              setCookie("token", token, { path: "/", maxAge: 60 });
+              // console.log(cookies);
+  
+              history.push(`/account/${username}`);
+            }
           } else {
+            setError('No Account Found');
             // Authentication failed
             // Handle the error or show a message to the user
             console.log("Login failed");

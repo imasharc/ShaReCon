@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Link,
@@ -26,7 +26,9 @@ function App() {
   const [cookie, setCookie, removeCookie] = useCookies(); // Replace 'token' with your cookie name
 
   const handleLogout = () => {
-    removeCookie("token"); // Remove the 'token' cookie
+    console.log(cookie.token);
+    // setCookie("token", null, { path: "/" });
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   };
 
   const handleAuth = async () => {
@@ -41,7 +43,9 @@ function App() {
         if (data.account.token === cookie.token) {
           console.log(data.account.username);
           console.log(cookie.token);
+          console.log(history);
           history.push(`/account/${data.account.username}`);
+          window.location.href = window.location.href;
         } else {
           console.error("Authorization failed");
         }
@@ -53,9 +57,13 @@ function App() {
     }
   };
 
+  // useEffect(() => {
+  //   handleAuth();
+  // }, []);
+
   return (
-    <div className="app-container">
-      <Router>
+    <Router>
+      <div className="app-container">
         <div className="nav-container">
           <Link className="nav-link" to="/">
             Home
@@ -70,12 +78,16 @@ function App() {
 
         <Switch>
           <Route path="/login" component={LoginForm} />
+          {/* <Route
+            path="/login"
+            render={() => <LoginForm handleAuth={handleAuth} />}
+          /> */}
           <Route path="/signup" component={SignupForm} />
           <PrivateRoute path="/account/:username" component={AccountPanel} />
           <Route path="/" component={Home} />
         </Switch>
-      </Router>
-    </div>
+      </div>
+    </Router>
   );
 }
 
