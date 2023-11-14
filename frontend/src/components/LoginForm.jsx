@@ -66,7 +66,7 @@ function LoginForm() {
             if (auth) {
               // Authentication was successful, and you can use the 'token'
               // Set the 'token' in your React state or cookies
-              setCookie("token", token, { path: "/", maxAge: 60 });
+              setCookie("token", token, { path: "/", maxAge: 60 * 60 });
               // console.log(cookies);
   
               history.push(`/account/${username}`);
