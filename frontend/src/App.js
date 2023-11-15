@@ -1,29 +1,41 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Link,
   Route,
   Switch,
   useHistory,
+  useLocation
 } from "react-router-dom";
 import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
 import AccountPanel from "./components/AccountPanel";
 import { CookiesProvider, useCookies } from "react-cookie";
 import PrivateRoute from "./components/PrivateRoute";
+import PostPrompt from "./components/PostPrompt";
 import "../src/App.css";
 
-function Home() {
+function Home({ isHome, handlePromptSubmit }) {
   return (
     <div className="greeting-container">
       <h1 className="greeting-text">Welcome to the Home</h1>
+      {isHome && <PostPrompt onPromptSubmit={handlePromptSubmit} />}
     </div>
   );
 }
 
 function App() {
+  const location = useLocation();
+  const isHome = location.pathname === '/';
   const history = useHistory(); // Initialize useHistory
   const [cookie, setCookie, removeCookie] = useCookies(); // Replace 'token' with your cookie name
+  const [promptText, setPromptText] = useState('');
+
+  const handlePromptSubmit = (text) => {
+    // Add logic to handle the prompt submission, e.g., send it to the server
+    console.log('Prompt submitted:', text);
+    setPromptText('');
+  };
 
   const handleLogout = () => {
     console.log(cookie.token);
@@ -84,7 +96,12 @@ function App() {
           /> */}
           <Route path="/signup" component={SignupForm} />
           <PrivateRoute path="/account/:username" component={AccountPanel} />
-          <Route path="/" component={Home} />
+          <Route
+            path="/"
+            render={() => (
+              <Home isHome={isHome} handlePromptSubmit={handlePromptSubmit} />
+            )}
+          />
         </Switch>
       </div>
     </Router>
