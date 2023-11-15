@@ -1,0 +1,31 @@
+/* PostPrompt.css */
+.post-prompt-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20vh; /* Set the height to 20% of the viewport height for vertical centering */
+  }
+  
+  form {
+    text-align: center;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+  }
+  
+  button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+  }
+  
