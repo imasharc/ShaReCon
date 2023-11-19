@@ -2,14 +2,13 @@
 services:
   sharc_react_dev:
     container_name: sharc_react_dev
-    # stdin_open: true
-    # tty: true
     build:
-      context: .
-      dockerfile: Dockerfile.dev
+      context: ../
+      dockerfile: docker/Dockerfile.dev
+    image: sharc_react_dev_image
     ports:
       - "3000:3000"
     volumes:
-      - ./src:/usr/src/app/frontend/src:ro
+      - ../src:/usr/src/app/frontend/src:ro
     env_file:
-      - ./.env
+      - .env
