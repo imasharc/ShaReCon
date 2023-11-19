@@ -4,8 +4,8 @@ services:
   sharc_back_prod:
     container_name: sharc_back_prod
     build:
-      context: .
-      dockerfile: Dockerfile.prod
+      context: ../
+      dockerfile: docker/Dockerfile.prod
       target: production
 
     ports:

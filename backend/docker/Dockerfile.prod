@@ -1,6 +1,8 @@
 FROM node:18.18.2-alpine as development
 
-WORKDIR /usr/src/app
+WORKDIR /usr/src/app/backend
+
+RUN cd ..
 
 COPY package*.json .
 
@@ -19,12 +21,12 @@ FROM  node:18.18.2-alpine as production
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
-WORKDIR /usr/src/app
+WORKDIR /usr/src/app/backend
 
 COPY package*.json .
 
 RUN npm install --only=production
 
-COPY --from=development /usr/src/app/dist ./dist
+COPY --from=development /usr/src/app/backend/dist ./dist
 
 CMD ["node", "dist/server.js"]
