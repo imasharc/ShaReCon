@@ -26,7 +26,7 @@ const AuthController = {
   
         if (passwordsMatch) {
             const accessToken = createTokens(req.body.account.username);
-            const account = Account.updateAccessToken(req.body.account.username, accessToken);
+            Account.updateAccessToken(req.body.account.username, accessToken);
 
           // Authentication successful
           res.cookie('jwt', accessToken, { sameSite: 'None', httpOnly: false, maxAge: 24 * 60 * 60 * 1000 });
