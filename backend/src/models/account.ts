@@ -49,6 +49,30 @@ const Account = {
         }
     },
 
+    // Method to retrieve an account by id
+    getById: async (id: any) => {
+        try {
+            const query = {
+                text: 'SELECT * FROM account WHERE id = $1',
+                values: [id],
+            };
+
+            const data = await pool.query(query);
+
+            if (data.rows.length > 0) {
+                // Return the first matching account as a JSON object
+                return data.rows[0];
+            } else {
+                // If no matching account is found, return null
+                return null;
+            }
+        } catch (err) {
+            // Handle any errors that occur during the database query
+            console.error('Error in getByUsername:', err);
+            throw err;
+        }
+    },
+
     // Method to retrieve an account by token
     getByToken: async (token: string) => {
         try {
