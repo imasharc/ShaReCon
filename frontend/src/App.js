@@ -13,6 +13,7 @@ import AccountPanel from "./components/AccountPanel";
 import { CookiesProvider, useCookies } from "react-cookie";
 import PrivateRoute from "./components/PrivateRoute";
 import PostPrompt from "./components/PostPrompt";
+import MainFeed from './components/MainFeed';
 import "../src/App.css";
 
 function Home({ isHome, handlePromptSubmit }) {
@@ -30,11 +31,28 @@ function App() {
   const history = useHistory(); // Initialize useHistory
   const [cookie, setCookie, removeCookie] = useCookies(); // Replace 'token' with your cookie name
   const [promptText, setPromptText] = useState('');
+  const [posts, setPosts] = useState([]);
 
   const handlePromptSubmit = (text) => {
     // Add logic to handle the prompt submission, e.g., send it to the server
     console.log('Prompt submitted:', text);
     setPromptText('');
+  };
+
+  const fetchPosts = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/posts');
+      if (!response.ok) {
+        throw new Error(`Failed to fetch posts: ${response.status}`);
+      }
+
+      const fetchedData = await response.json();
+      const fetchedPosts = fetchedData.posts;
+      console.log(fetchedPosts);
+      setPosts(fetchedPosts);
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    }
   };
 
   const handleLogout = () => {
@@ -69,9 +87,10 @@ function App() {
     }
   };
 
-  // useEffect(() => {
-  //   handleAuth();
-  // }, []);
+  useEffect(() => {
+    console.log("works?")
+    fetchPosts();
+  }, []);
 
   return (
     <Router>
@@ -99,7 +118,10 @@ function App() {
           <Route
             path="/"
             render={() => (
-              <Home isHome={isHome} handlePromptSubmit={handlePromptSubmit} />
+              <>
+                <Home isHome={isHome} handlePromptSubmit={handlePromptSubmit} />
+                <MainFeed posts={posts} />
+              </>
             )}
           />
         </Switch>
