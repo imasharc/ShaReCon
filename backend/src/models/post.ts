@@ -44,7 +44,7 @@ const Post = {
         }
     },
 
-        // Method to create a new post
+    // Method to create a new post with account ID
     createNew: async (text_content: string, user_id: number, created_at: any) => {
         try {
             const query = {
@@ -52,6 +52,31 @@ const Post = {
                     VALUES($1, $2, $3, null)
                     RETURNING *`,
                 values: [text_content, user_id, created_at],
+            };
+
+            const data = await pool.query(query);
+
+            if (data.rows.length > 0) {
+                return data.rows[0];
+            } else {
+                return null;
+            }
+        } catch (err) {
+            console.error('Error in createNewPost:', err);
+            throw err;
+        }
+    },
+
+    // Method to create a new post with token
+    createNewWithToken: async (text_content: string, token: string, created_at: any) => {
+        try {
+            const account = await Account.getByToken(token);
+            console.log("accountID: " + account.id);
+            const query = {
+                text: `INSERT INTO post(text_content, user_id, created_at, updated_at)
+                    VALUES($1, $2, $3, null)
+                    RETURNING *`,
+                values: [text_content, account.id, created_at],
             };
 
             const data = await pool.query(query);

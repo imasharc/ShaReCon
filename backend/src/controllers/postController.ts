@@ -33,17 +33,17 @@ module.exports = {
         }
     },
 
-    // CHANGE METHODS
-    createNew: async (req: any, res: any) => {
+    // Create new post with tokeb
+    createNewWithToken: async (req: any, res: any) => {
         const reqNew = {
             text_content: req.body.post.text_content,
-            user_id: req.body.post.user_id,
+            token: req.body.post.token,
             // updated_at: req.body.post.updated_at,
         }
         console.log(req.body);
         console.log(reqNew);
 
-        const account = Account.getById(reqNew.user_id);
+        const account = Account.getByToken(reqNew.token);
         const accessToken = createTokens(account.username);
         console.log(accessToken);
 
@@ -51,7 +51,7 @@ module.exports = {
             // Create a new account, checking if the username is available
             const currentDateTime = new Date();
             const formattedDateTime = `${currentDateTime.getFullYear()}-${(currentDateTime.getMonth() + 1).toString().padStart(2, '0')}-${currentDateTime.getDate().toString().padStart(2, '0')} ${currentDateTime.getHours().toString().padStart(2, '0')}:${currentDateTime.getMinutes().toString().padStart(2, '0')}:${currentDateTime.getSeconds().toString().padStart(2, '0')}`;
-            const newPost = await Post.createNew(reqNew.text_content, reqNew.user_id, formattedDateTime);
+            const newPost = await Post.createNewWithToken(reqNew.text_content, reqNew.token, formattedDateTime);
 
             if (newPost && !newPost.error) {
                 res.status(201).json({ message: 'Post created successfully', post: newPost });
@@ -68,6 +68,8 @@ module.exports = {
             res.status(500).json({ error: 'Internal server error' });
         }
     },
+
+
 
     // Update an account by username
     updateById: async (req: any, res: any) => {
