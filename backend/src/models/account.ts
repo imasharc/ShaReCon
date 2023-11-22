@@ -14,7 +14,24 @@ const Account = {
     // Method to retrieve all accounts
     getAllAccounts: async () => {
         try {
-            const query = 'SELECT * FROM account';
+            const query = `
+            SELECT
+                a.*,
+                JSON_AGG(
+                    JSON_BUILD_OBJECT(
+                        'post_id', p.id,
+                        'text_content', p.text_content,
+                        'created_at', p.created_at,
+                        'updated_at', p.updated_at
+                    )
+                ) AS posts
+            FROM
+                account a
+            LEFT JOIN
+                post p ON a.id = p.user_id
+            GROUP BY
+                a.id;
+            `;
             const data = await pool.query(query);
 
             return data.rows;
@@ -29,7 +46,25 @@ const Account = {
     getByUsername: async (username: string) => {
         try {
             const query = {
-                text: 'SELECT * FROM account WHERE username = $1',
+                text: `
+                SELECT
+                    a.*,
+                    JSON_AGG(
+                        JSON_BUILD_OBJECT(
+                            'post_id', p.id,
+                            'text_content', p.text_content,
+                            'created_at', p.created_at,
+                            'updated_at', p.updated_at
+                        )
+                    ) AS posts
+                FROM
+                    account a
+                LEFT JOIN
+                    post p ON a.id = p.user_id
+                WHERE
+                    a.username = $1
+                GROUP BY
+                    a.id;`,
                 values: [username],
             };
 
@@ -53,7 +88,25 @@ const Account = {
     getById: async (id: any) => {
         try {
             const query = {
-                text: 'SELECT * FROM account WHERE id = $1',
+                text: `
+                SELECT
+                    a.*,
+                    JSON_AGG(
+                        JSON_BUILD_OBJECT(
+                            'post_id', p.id,
+                            'text_content', p.text_content,
+                            'created_at', p.created_at,
+                            'updated_at', p.updated_at
+                        )
+                    ) AS posts
+                FROM
+                    account a
+                LEFT JOIN
+                    post p ON a.id = p.user_id
+                WHERE
+                    a.id = $1
+                GROUP BY
+                    a.id;`,
                 values: [id],
             };
 
@@ -77,7 +130,25 @@ const Account = {
     getByToken: async (token: string) => {
         try {
             const query = {
-                text: 'SELECT * FROM account WHERE token = $1',
+                text: `
+                SELECT
+                    a.*,
+                    JSON_AGG(
+                        JSON_BUILD_OBJECT(
+                            'post_id', p.id,
+                            'text_content', p.text_content,
+                            'created_at', p.created_at,
+                            'updated_at', p.updated_at
+                        )
+                    ) AS posts
+                FROM
+                    account a
+                LEFT JOIN
+                    post p ON a.id = p.user_id
+                WHERE
+                    a.token = $1
+                GROUP BY
+                    a.id;`,
                 values: [token],
             };
 
