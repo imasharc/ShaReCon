@@ -13,7 +13,26 @@ const Post = {
     // Method to retrieve all posts
     getAllPosts: async () => {
         try {
-          const query = 'SELECT * FROM post';
+          const query = `
+            SELECT
+                p.id,
+                p.text_content,
+                p.created_at,
+                p.updated_at,
+                JSON_BUILD_OBJECT(
+                    'user_id', a.id,
+                    'firstname', a.firstname,
+                    'lastname', a.lastname,
+                    'email', a.email,
+                    'username', a.username,
+                    'password', a.password,
+                    'token', a.token
+                ) AS account
+            FROM
+            post p
+            JOIN
+            account a ON p.user_id = a.id;
+            `;
           const data = await pool.query(query);
     
           return data.rows;
@@ -27,7 +46,25 @@ const Post = {
     getById: async (id: any) => {
         try {
             const query = {
-                text: 'SELECT * FROM post WHERE id = $1',
+                text: `
+                SELECT
+                    p.id,
+                    p.text_content,
+                    p.created_at,
+                    p.updated_at,
+                    JSON_BUILD_OBJECT(
+                        'user_id', a.id,
+                        'firstname', a.firstname,
+                        'lastname', a.lastname,
+                        'email', a.email,
+                        'username', a.username,
+                        'password', a.password,
+                        'token', a.token
+                    ) AS account
+                FROM post p
+                JOIN account a ON p.user_id = a.id
+                WHERE p.id = $1
+                `,
                 values: [id],
             };
 
