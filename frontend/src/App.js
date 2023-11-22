@@ -33,10 +33,14 @@ function App() {
   const [promptText, setPromptText] = useState('');
   const [posts, setPosts] = useState([]);
 
-  const handlePromptSubmit = (text) => {
-    // Add logic to handle the prompt submission, e.g., send it to the server
-    console.log('Prompt submitted:', text);
-    setPromptText('');
+  const handlePromptSubmit = async (text) => {
+    try {
+      console.log('Prompt submitted:', text);
+      await fetchPosts();
+      setPromptText('');
+    } catch (error) {
+      console.error('Error handling prompt submission:', error);
+    }
   };
 
   const fetchPosts = async () => {
@@ -49,10 +53,17 @@ function App() {
       const fetchedData = await response.json();
       const fetchedPosts = fetchedData.posts;
       console.log(fetchedPosts);
-      setPosts(fetchedPosts);
-    } catch (error) {
-      console.error('Error fetching posts:', error);
-    }
+      
+      // Sort posts by created_at in descending order
+      const sortedPosts = fetchedPosts.sort((a, b) => {
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
+
+      setPosts(sortedPosts);
+
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
   };
 
   const handleLogout = () => {

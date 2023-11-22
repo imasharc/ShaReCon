@@ -8,7 +8,7 @@ const PostPrompt = ({ onPromptSubmit, authToken }) => {
   const [cookies] = useCookies(['token']);
 
   const handlePromptSubmit = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     
     try {
       const authToken = cookies.token;
