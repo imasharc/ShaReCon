@@ -29,8 +29,8 @@ function Home({ isHome, handlePromptSubmit }) {
 
 function App() {
   const location = useLocation();
-  const isHome = location.pathname === '/';
   const history = useHistory(); // Initialize useHistory
+  const [isHome, setIsHome] = useState(location.pathname === '/');
   const [cookie, setCookie, removeCookie] = useCookies(); // Replace 'token' with your cookie name
   const [promptText, setPromptText] = useState('');
   const [posts, setPosts] = useState([]);
@@ -101,9 +101,10 @@ function App() {
   };
 
   useEffect(() => {
-    console.log("works?")
+    setIsHome(location.pathname === '/');
+    console.log('isHome:', isHome);
     fetchPosts();
-  }, []);
+  }, [location.pathname, isHome]);
 
   return (
     <Router>
