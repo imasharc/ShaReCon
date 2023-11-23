@@ -19,15 +19,7 @@ const Post = {
                 p.text_content,
                 p.created_at,
                 p.updated_at,
-                JSON_BUILD_OBJECT(
-                    'user_id', a.id,
-                    'firstname', a.firstname,
-                    'lastname', a.lastname,
-                    'email', a.email,
-                    'username', a.username,
-                    'password', a.password,
-                    'token', a.token
-                ) AS account
+                a.username
             FROM
             post p
             JOIN
@@ -52,15 +44,7 @@ const Post = {
                     p.text_content,
                     p.created_at,
                     p.updated_at,
-                    JSON_BUILD_OBJECT(
-                        'user_id', a.id,
-                        'firstname', a.firstname,
-                        'lastname', a.lastname,
-                        'email', a.email,
-                        'username', a.username,
-                        'password', a.password,
-                        'token', a.token
-                    ) AS account
+                    a.username
                 FROM post p
                 JOIN account a ON p.user_id = a.id
                 WHERE p.id = $1
@@ -77,6 +61,51 @@ const Post = {
             }
         } catch (err) {
             console.error('Error in getPostById:', err);
+            throw err;
+        }
+    },
+
+    // Method to retrieve psot by author's username
+    getByUsername: async (username: string) => {
+        try {
+            const query = {
+                text: `
+                SELECT
+                    a.username,
+                    a.firstname,
+                    a.lastname,
+                    JSON_AGG(
+                        JSON_BUILD_OBJECT(
+                            'post_id', p.id,
+                            'text_content', p.text_content,
+                            'created_at', p.created_at,
+                            'updated_at', p.updated_at,
+                            'username', a.username
+                        )
+                    ) AS posts
+                FROM
+                    account a
+                LEFT JOIN
+                    post p ON a.id = p.user_id
+                WHERE
+                    a.username = $1
+                GROUP BY
+                    a.id;`,
+                values: [username],
+            };
+
+            const data = await pool.query(query);
+
+            if (data.rows.length > 0) {
+                // Return the first matching account as a JSON object
+                return data.rows[0];
+            } else {
+                // If no matching account is found, return null
+                return null;
+            }
+        } catch (err) {
+            // Handle any errors that occur during the database query
+            console.error('Error in getByUsername:', err);
             throw err;
         }
     },
