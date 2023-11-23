@@ -14,9 +14,11 @@ import { CookiesProvider, useCookies } from "react-cookie";
 import PrivateRoute from "./components/PrivateRoute";
 import PostPrompt from "./components/PostPrompt";
 import MainFeed from './components/MainFeed';
+import Profile from "./components/Profile";
 import "../src/App.css";
 
 function Home({ isHome, handlePromptSubmit }) {
+  console.log('isHome:', isHome);
   return (
     <div className="greeting-container">
       <h1 className="greeting-text">Welcome to the Home</h1>
@@ -126,6 +128,7 @@ function App() {
           /> */}
           <Route path="/signup" component={SignupForm} />
           <PrivateRoute path="/account/:username" component={AccountPanel} />
+          <Route path="/:username" component={Profile} />
           <Route
             path="/"
             render={() => (

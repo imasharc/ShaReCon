@@ -1,0 +1,26 @@
+/* Profile.css (or your preferred stylesheet) */
+.profile-container {
+    max-width: 600px; /* Set a maximum width for the profile container */
+    margin: auto; /* Center the profile container */
+  }
+  
+  .user-posts {
+    margin-top: 20px; /* Add spacing above the user posts */
+  }
+  
+  .user-post {
+    border: 1px solid #ccc; /* Add a border to the user post container */
+    padding: 10px; /* Add some padding to the user post container */
+    margin-bottom: 10px; /* Add spacing between user posts */
+    border-radius: 8px; /* Add rounded corners to the user post container */
+  }
+  
+  .post-user {
+    margin-bottom: 8px; /* Add spacing between user ID and post text */
+    color: #555; /* Add a subtle color to the user ID */
+  }
+  
+  .post-content {
+    margin: 0; /* Remove default margin from the post text */
+  }
+  
