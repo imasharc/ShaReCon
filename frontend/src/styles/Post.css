@@ -1,0 +1,72 @@
+/* Post.css */
+.post-container {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 15px;
+  overflow: hidden; /* Clear the float */
+}
+
+.user-picture {
+  float: left; /* Float the user picture to the left */
+  margin-right: 10px; /* Adjust the margin as needed to add space between picture and username */
+}
+
+.user-picture img {
+  width: 40px; /* Adjust the width as needed */
+  border-radius: 50%; /* Make it a circular image */
+}
+
+.post-user {
+  font-weight: bold;
+  margin-bottom: 5px;
+  margin-left: 50px; /* Add margin to the left of the username to create space for the picture */
+}
+
+.post-text {
+  margin-bottom: 10px;
+}
+
+.post-created-at {
+  font-size: 12px;
+  color: #ddd;
+}
+
+.comment-prompt {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.comment-prompt input {
+  width: 70%; /* Adjust the width as needed */
+  padding: 5px;
+  margin-right: 5px;
+}
+
+.comment-prompt button {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.comments-container {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.comment-container {
+  margin-bottom: 10px;
+}
+
+.comment-author {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.comment-text {
+  margin-bottom: 5px;
+}
+
+.comment-created-at {
+  font-size: 12px;
+  color: #ddd;
+}

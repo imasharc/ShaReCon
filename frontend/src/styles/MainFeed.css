@@ -3,19 +3,3 @@
   max-width: 600px; /* Set a maximum width for the main feed */
   margin: auto; /* Center the main feed */
 }
-
-.tweet-container {
-  border: 1px solid #ccc; /* Add a border to the tweet container */
-  padding: 10px; /* Add some padding to the tweet container */
-  margin-bottom: 10px; /* Add spacing between tweets */
-  border-radius: 8px; /* Add rounded corners to the tweet container */
-}
-
-.tweet-user {
-  margin-bottom: 8px; /* Add spacing between user ID and tweet text */
-  color: #555; /* Add a subtle color to the user ID */
-}
-
-.tweet-text {
-  margin: 0; /* Remove default margin from the tweet text */
-}
