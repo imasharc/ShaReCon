@@ -14,16 +14,18 @@ const Post = {
     getAllPosts: async () => {
         try {
           const query = `
-            SELECT
+          SELECT
                 p.id,
                 p.text_content,
                 p.created_at,
                 p.updated_at,
                 a.username
             FROM
-            post p
+                post p
             JOIN
-            account a ON p.user_id = a.id;
+                account a ON p.user_id = a.id
+            ORDER BY
+                p.created_at DESC;
             `;
           const data = await pool.query(query);
     
@@ -44,10 +46,28 @@ const Post = {
                     p.text_content,
                     p.created_at,
                     p.updated_at,
-                    a.username
-                FROM post p
-                JOIN account a ON p.user_id = a.id
-                WHERE p.id = $1
+                    a_post.username,
+                    JSON_AGG(
+                        JSON_BUILD_OBJECT(
+                            'id', c.id,
+                            'text_content', c.text_content,
+                            'created_at', c.created_at,
+                            'updated_at', c.updated_at,
+                            'username', a_comment.username
+                        )
+                    ) AS comments
+                FROM
+                    post p
+                JOIN
+                    account a_post ON p.user_id = a_post.id
+                LEFT JOIN
+                    comment c ON p.id = c.post_id
+                LEFT JOIN
+                    account a_comment ON c.user_id = a_comment.id
+                WHERE
+                    p.id = $1
+                GROUP BY
+                    p.id, a_post.username;
                 `,
                 values: [id],
             };
@@ -71,12 +91,11 @@ const Post = {
             const query = {
                 text: `
                 SELECT
+                    a.id,
                     a.username,
-                    a.firstname,
-                    a.lastname,
                     JSON_AGG(
                         JSON_BUILD_OBJECT(
-                            'post_id', p.id,
+                            'id', p.id,
                             'text_content', p.text_content,
                             'created_at', p.created_at,
                             'updated_at', p.updated_at,
@@ -85,12 +104,13 @@ const Post = {
                     ) AS posts
                 FROM
                     account a
-                LEFT JOIN
+                JOIN
                     post p ON a.id = p.user_id
                 WHERE
                     a.username = $1
                 GROUP BY
-                    a.id;`,
+                    a.id, a.username;
+`,
                 values: [username],
             };
 
