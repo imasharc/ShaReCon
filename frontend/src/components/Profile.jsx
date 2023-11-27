@@ -30,13 +30,18 @@ const Profile = () => {
     <div className="profile-container">
       {userProfile && (
         <>
-          <h2>{userProfile.username}'s Profile</h2>
-          <div className="user-posts">
-            <h3>Posts by {userProfile.username}</h3>
-            {userProfile.posts.map((post) => (
-              <Post key={post.id} post={post}/>
-            ))}
+          <div className="user-profile-header">
+            <div className="main-user-picture">
+              <img src="https://imgs.search.brave.com/I8zySyfdpB3tHk9GWmI2lcNkb5eiE7HqEyIgKvUOrNI/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90aHVt/YnMuZHJlYW1zdGlt/ZS5jb20vYi91cy12/aWNlLXByZXNpZGVu/dC1taWtlLXBlbmNl/LWhlcnNoZXktcGEt/dXNhLWRlY2VtYmVy/LXVzLXZpY2UtcHJl/c2lkZW50LW1pa2Ut/cGVuY2Utc3BlYWtp/bmctcG9saXRpY2Fs/LXJhbGx5LXVzLTE2/NjUzNzg2NS5qcGc" alt="User Profile" />
+            </div>
+            <h2>{userProfile.username}'s Profile</h2>
           </div>
+            <div className="user-posts">
+              <h3>Posts by {userProfile.username}</h3>
+              {userProfile.posts.map((post) => (
+                <Post key={post.id} post={post}/>
+              ))}
+            </div>
         </>
       )}
     </div>

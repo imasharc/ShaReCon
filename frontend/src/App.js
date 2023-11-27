@@ -102,7 +102,7 @@ function App() {
 
   useEffect(() => {
     setIsHome(location.pathname === '/');
-    console.log('isHome:', isHome);
+    // console.log('isHome:', isHome);
     fetchPosts();
   }, [location.pathname, isHome]);
 
