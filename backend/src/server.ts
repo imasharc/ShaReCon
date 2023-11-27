@@ -28,6 +28,8 @@ const accountApiRouter = require('./routes/api/accountApiRoutes');
 app.use('/api/users', accountApiRouter);
 const postApiRouter = require('./routes/api/postApiRoutes');
 app.use('/api/posts', postApiRouter);
+const commentApiRouter = require('./routes/api/commentApiRoutes');
+app.use('/api/comments', commentApiRouter);
 
 const authRoutes = require('./routes/authRoutes'); // Import the AuthController
 // Auth endpoint for user login
