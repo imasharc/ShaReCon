@@ -1,9 +1,10 @@
 /* PostPrompt.css */
 .post-prompt-container {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    height: 20vh; /* Set the height to 20% of the viewport height for vertical centering */
+    justify-content: center;
+    /* height: 30vh; */
   }
   
   form {

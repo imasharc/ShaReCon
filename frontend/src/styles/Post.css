@@ -70,3 +70,23 @@
   font-size: 12px;
   color: #ddd;
 }
+
+button {
+  background-color: #007bff; /* Blue by default */
+  color: #fff; /* Text color */
+  padding: 6px 12px; /* Adjust padding for a smaller size */
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px; /* Adjust font size for a smaller size */
+  margin-top: 8px; /* Add margin to separate from the input */
+  transition: background-color 0.3s; /* Smooth transition for color change */
+}
+
+button:hover {
+  background-color: rgb(0, 47, 255); /* Red on hover */
+}
+
+.delete-button:hover {
+  background-color: #dc3545; /* Red on hover */
+}
