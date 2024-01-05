@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS Account (
 CREATE TABLE IF NOT EXISTS Post (
     id SERIAL PRIMARY KEY,
     text_content TEXT NOT NULL,
-    user_id INTEGER REFERENCES Account(id),
+    user_id INTEGER REFERENCES Account(id) ON DELETE CASCADE,
     created_at VARCHAR(100) NOT NULL,
     updated_at VARCHAR(100) NULL
 );
@@ -22,8 +22,8 @@ CREATE TABLE IF NOT EXISTS Post (
 CREATE TABLE IF NOT EXISTS Comment (
     id SERIAL PRIMARY KEY,
     text_content TEXT NOT NULL,
-    user_id INTEGER REFERENCES Account(id),
-    post_id INTEGER REFERENCES Post(id),
+    user_id INTEGER REFERENCES Account(id) ON DELETE CASCADE,
+    post_id INTEGER REFERENCES Post(id) ON DELETE CASCADE,
     created_at VARCHAR(100) NOT NULL,
     updated_at VARCHAR(100) NULL
 );
