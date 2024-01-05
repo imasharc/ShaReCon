@@ -16,7 +16,25 @@ module.exports = {
         }
     },
 
-    // Get Post by id
+    // Get Comment by id
+    getById: async (req: any, res: any) => {
+        const { id } = req.params; // Use req.params to get the username from the route params
+
+        try {
+            const data = await Comment.getById(id);
+
+            if (data) {
+                res.status(200).json({ post: data });
+            } else {
+                res.status(404).json({ message: 'Comment not found' });
+            }
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    },
+
+    // Get Cpomment by PostId
     getByPostId: async (req: any, res: any) => {
         const { id } = req.params; // Use req.params to get the username from the route params
 
@@ -119,16 +137,27 @@ module.exports = {
     // Delete an account by username and paasword
     deleteById: async (req: any, res: any) => {
         const { id } = req.params; // Get the username from the route params
+        // const { token } = req.body;
 
         try {
-            const result = await Post.deleteById(id);
+            console.log(req.body);
+            const account = await Account.getByToken(req.body.comment.token);
+            const comment = await Comment.getById(req.body.comment.comment_id);
+            console.log(account.username);
+            console.log(comment.comments[0].username);
+            
+            if (comment.comments[0].username !== account.username) {
+                res.status(500).json({ error: 'Cannot delete comment' });
+                return null;
+            }
+            const result = await Comment.deleteById(id);
 
             if (result) {
                 // Account was deleted successfully or password was correct
                 res.status(200).json(result);
             } else {
                 // Account not found or password incorrect
-                res.status(404).json({ message: 'Post not found' });
+                res.status(404).json({ message: 'Comment not found' });
             }
         } catch (err) {
             console.error(err);

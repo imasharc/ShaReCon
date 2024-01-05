@@ -48,7 +48,56 @@ const Comment = {
         }
       },
 
-    // Method to retrieve a post by ID
+    // Method to retrieve a comment by ID
+    getById: async (id: any) => {
+        try {
+            const query = {
+                text: `
+                SELECT
+                    p.id,
+                    p.text_content,
+                    p.created_at,
+                    p.updated_at,
+                    a_post.username,
+                    JSON_AGG(
+                        JSON_BUILD_OBJECT(
+                            'id', c.id,
+                            'text_content', c.text_content,
+                            'created_at', c.created_at,
+                            'updated_at', c.updated_at,
+                            'username', a_comment.username
+                        )
+                    ) AS comments
+                FROM
+                    post p
+                JOIN
+                    account a_post ON p.user_id = a_post.id
+                LEFT JOIN
+                    comment c ON p.id = c.post_id
+                LEFT JOIN
+                    account a_comment ON c.user_id = a_comment.id
+                WHERE
+                    c.id = $1
+                GROUP BY
+                    p.id, a_post.username;
+                `,
+                values: [id],
+            };
+
+            const data = await pool.query(query);
+
+            if (data.rows.length > 0) {
+                return data.rows[0];
+            } else {
+                return null;
+            }
+        } catch (err) {
+            console.error('Error in getById:', err);
+            throw err;
+        }
+    },
+
+    // Method to retrieve a comment by PostId
     getByPostId: async (id: any) => {
         try {
             const query = {
@@ -97,7 +146,7 @@ const Comment = {
         }
     },
 
-    // Method to retrieve psot by author's username
+    // Method to retrieve comment by author's username
     getByUsername: async (username: string) => {
         try {
             const query = {
@@ -126,7 +175,7 @@ const Comment = {
                 LEFT JOIN
                     account a_comment ON c.user_id = a_comment.id
                 WHERE
-                    a_post.username = $1
+                    a_comment.username = $1
                 GROUP BY
                     p.id, a_post.username;
 `,
@@ -213,15 +262,15 @@ const Comment = {
     deleteById: async (id: any) => {
         try {
             const query = {
-                text: 'DELETE FROM post WHERE id = $1',
+                text: 'DELETE FROM comment WHERE id = $1',
                 values: [id],
             };
 
             await pool.query(query);
 
-            return { message: 'Post deleted successfully' };
+            return { message: 'Comment deleted successfully' };
         } catch (err) {
-            console.error('Error in deletePostById:', err);
+            console.error('Error in deleteCommentById:', err);
             throw err;
         }
     },
