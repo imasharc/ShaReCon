@@ -53,6 +53,7 @@ const PostPrompt = ({ onPromptSubmit, authToken }) => {
 
   return (
     <div className="post-prompt-container">
+    {cookies.token && (
       <form onSubmit={handlePromptSubmit}>
           <input
           type="text"
@@ -62,6 +63,7 @@ const PostPrompt = ({ onPromptSubmit, authToken }) => {
           onChange={(e) => setText(e.target.value)}/>
         <button type="submit">Submit</button>
       </form>
+      )}
     </div>
   );
 };
