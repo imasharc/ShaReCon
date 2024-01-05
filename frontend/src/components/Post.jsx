@@ -58,6 +58,36 @@ const Post = ({ post }) => {
     }
   };
 
+  const handleDeletePost = async (postId) => {
+    try {
+      console.log("DELETE?");
+      const authToken = cookies.token;
+
+      if (authToken) {
+        const response = await fetch(`http://localhost:3001/api/posts/${postId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            "post": {
+                "post_id": postId,
+                "token": authToken
+              }
+            }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to delete post: ${response.status}`);
+        }
+        // Reload the page after successful deletion
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
+  };
+
   const fetchComments = async (postId) => {
     try {
       const response = await fetch(`http://localhost:3001/api/comments/post/${postId}`);
@@ -80,13 +110,6 @@ const Post = ({ post }) => {
     setCommentText(e.target.value);
   };
 
-  const handleCommentSubmit = (postId) => {
-    console.log(`Comment submitted for post ${post.id}: ${commentText}`);
-
-    // For simplicity, let's clear the comment text after submission
-    setCommentText('');
-  };
-
   const handleShowCommentsClick = async (postId) => {
     await fetchComments(postId);
     setShowComments(!showComments);
@@ -103,18 +126,26 @@ const Post = ({ post }) => {
       <p className="post-user"><Link to={`/${post.username}`}>{post.username}</Link></p>
       <p className="post-text">{post.text_content}</p>
       <p className="post-created-at">{post.created_at}</p>
+
+      {cookies.token && (
+        <button className="delete-button" onClick={() => handleDeletePost(post.id)}>Delete Post</button>
+      )}
       
-      {/* Render comments prompt and toggle button */}
+      
       <div className="comment-prompt">
+        {cookies.token && (
         <input
           type="text"
           placeholder="Add a comment..."
           value={commentText}
           onChange={handleCommentChange}
-          onKeyDown={(e) => e.key === 'Enter' && handleCommentSubmit()}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handlePromptSubmit()}}
         />
+        )}
+        {cookies.token && (
         <button onClick={handlePromptSubmit}>Submit</button>
-          
+        )}
         <button onClick={() => handleShowCommentsClick(post.id)}>
           {showComments ? 'Hide Comments' : 'Show Comments'}
         </button>
