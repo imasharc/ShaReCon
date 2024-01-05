@@ -119,6 +119,17 @@ module.exports = {
         const { id } = req.params; // Get the username from the route params
 
         try {
+            // console.log(req.body);
+            const account = await Account.getByToken(req.body.post.token);
+            const post = await Post.getById(req.body.post.post_id);
+            console.log(account.username);
+            console.log(post.username);
+            
+            if (post.username !== account.username) {
+                res.status(500).json({ error: 'Cannot delete comment' });
+                return null;
+            }
+
             const result = await Post.deleteById(id);
 
             if (result) {
