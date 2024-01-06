@@ -22,7 +22,11 @@ All is containerized with Docker.
 
 The following diagram describes the use cases for feed activities for different user roles.
 
-![feed activities - use case diagram](doc\feed activities - use case diagram.png)
+![feed activities - use case diagram](doc/feed%20activities%20-%20use%20case%20diagram.png)
+
+The following diagram describes the platform architecture - including docker containers.
+
+![platform architecture](doc/platform%20architecture.png)
 
 ## Prerequisites
 
