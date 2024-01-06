@@ -18,6 +18,12 @@ ShaReCon is intended to be Modern Open-Source Social Media Platform (that is als
 Client side is written in React, while the backend is written in NodeJS (with some Typescript on top of it) and all the data is stored using Postgres database.
 All is containerized with Docker.
 
+## Functionalities Use Case diagram
+
+The following diagram describes the use cases for feed activities for different user roles.
+
+![feed activities - use case diagram](doc\feed activities - use case diagram.png)
+
 ## Prerequisites
 
 Before running the application, ensure you have the Docker (v24.0.6) installed.
