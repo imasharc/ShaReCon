@@ -136,7 +136,7 @@ function SignupForm() {
               setError(null); // Reset the error state
     
               // Redirect to the login page (or any other page)
-              history.push(`/account/${username}`);
+              history.push(`/`);
             } else {
               // Handle signup error (e.g., show an error message)
               setError('Signup failed');

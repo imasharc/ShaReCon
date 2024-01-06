@@ -69,7 +69,7 @@ function LoginForm() {
               setCookie("token", token, { path: "/", maxAge: 60 * 60 });
               // console.log(cookies);
   
-              history.push(`/account/${username}`);
+              history.push(`/`);
             }
           } else {
             setError('No Account Found');
