@@ -5,7 +5,7 @@ import {
   Route,
   Switch,
   useHistory,
-  useLocation
+  useLocation,
 } from "react-router-dom";
 import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
@@ -13,12 +13,12 @@ import AccountPanel from "./components/AccountPanel";
 import { CookiesProvider, useCookies } from "react-cookie";
 import PrivateRoute from "./components/PrivateRoute";
 import PostPrompt from "./components/PostPrompt";
-import MainFeed from './components/MainFeed';
+import MainFeed from "./components/MainFeed";
 import Profile from "./components/Profile";
 import "../src/App.css";
 
 function Home({ isHome, handlePromptSubmit }) {
-  console.log('isHome:', isHome);
+  console.log("isHome:", isHome);
   return (
     <div className="greeting-container">
       <h1 className="greeting-text">Welcome to the Home</h1>
@@ -30,24 +30,25 @@ function Home({ isHome, handlePromptSubmit }) {
 function App() {
   const location = useLocation();
   const history = useHistory(); // Initialize useHistory
-  const [isHome, setIsHome] = useState(location.pathname === '/');
+  const [isHome, setIsHome] = useState(location.pathname === "/");
   const [cookie, setCookie, removeCookie] = useCookies(); // Replace 'token' with your cookie name
-  const [promptText, setPromptText] = useState('');
+  const [promptText, setPromptText] = useState("");
+  const [username, setUsername] = useState("");
   const [posts, setPosts] = useState([]);
 
   const handlePromptSubmit = async (text) => {
     try {
-      console.log('Prompt submitted:', text);
+      console.log("Prompt submitted:", text);
       await fetchPosts();
-      setPromptText('');
+      setPromptText("");
     } catch (error) {
-      console.error('Error handling prompt submission:', error);
+      console.error("Error handling prompt submission:", error);
     }
   };
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/posts');
+      const response = await fetch("http://localhost:3001/api/posts");
       if (!response.ok) {
         throw new Error(`Failed to fetch posts: ${response.status}`);
       }
@@ -55,17 +56,16 @@ function App() {
       const fetchedData = await response.json();
       const fetchedPosts = fetchedData.posts;
       console.log(fetchedPosts);
-      
+
       // Sort posts by created_at in descending order
       const sortedPosts = fetchedPosts.sort((a, b) => {
         return new Date(b.created_at) - new Date(a.created_at);
       });
 
       setPosts(sortedPosts);
-
-      } catch (error) {
-        console.error('Error fetching posts:', error);
-      }
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    }
   };
 
   const handleLogout = () => {
@@ -85,9 +85,10 @@ function App() {
 
         if (data.account.token === cookie.token) {
           console.log(data.account.username);
+          setUsername(data.account.username);
           console.log(cookie.token);
           console.log(history);
-          history.push(`/account/${data.account.username}`);
+          history.push(`/${data.account.username}`);
           window.location.href = window.location.href;
         } else {
           console.error("Authorization failed");
@@ -101,7 +102,7 @@ function App() {
   };
 
   useEffect(() => {
-    setIsHome(location.pathname === '/');
+    setIsHome(location.pathname === "/");
     // console.log('isHome:', isHome);
     fetchPosts();
   }, [location.pathname, isHome]);
@@ -113,6 +114,11 @@ function App() {
           <Link className="nav-link" to="/">
             Home
           </Link>
+          {cookie.token && (
+            <Link className="nav-link" to={`/${username}`} onClick={handleAuth}>
+              Profile
+            </Link>
+          )}
           <Link className="nav-link" to="/login" onClick={handleAuth}>
             Login
           </Link>
