@@ -10,5 +10,6 @@ services:
       - "3000:3000"
     volumes:
       - ../src:/usr/src/app/frontend/src:ro
+      - ../../assets:/usr/src/app/assets
     env_file:
       - .env
