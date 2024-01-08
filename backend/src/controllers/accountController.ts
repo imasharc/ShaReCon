@@ -1,5 +1,6 @@
 ﻿const Account = require('../models/account');
 const { createTokens } = require('../utils/JWT')
+const upload = require('../utils/multerConfig');
 
 module.exports = {
     // Get all accounts
@@ -124,6 +125,27 @@ module.exports = {
         } catch (err) {
             console.error(err);
             res.status(500).json({ error: 'Internal server error' });
+        }
+    },
+
+    uploadImage: async (req: any, res: any) => {
+        const { username } = req.params;
+        // const user = Account.getByUsername(username);
+        console.log(req.file);
+        // Check if file upload was successful
+        if (!req.file) {
+            return res.status(400).send({ message: 'No file uploaded.' });
+        }
+
+        // Construct the path to the saved image
+        const imagePath = `../../../assets/${req.file.originalname}`;
+        console.log(imagePath);
+        // Here you can call a function to update the user's profile with the new image path
+        try {
+            const updatedUser = await Account.updatePfpByUsername(username, imagePath);
+            res.status(200).json({ message: 'Image uploaded successfully.', updatedUser });
+        } catch (error) {
+            res.status(500).json({ message: 'Error updating profile image.', error });
         }
     },
 

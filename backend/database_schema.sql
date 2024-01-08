@@ -39,3 +39,6 @@ VALUES('Make Autonomous Driving Finally Great!', 1, TO_CHAR(CURRENT_TIMESTAMP, '
 -- Insert sample comment record
 INSERT INTO Comment(text_content, user_id, post_id, created_at, updated_at)
 VALUES('Openpilot is the future!', 1, 1, TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-MM-DD HH24:MI:SS'), null);
+
+-- Add column with profile picture to Account table
+ALTER TABLE Account ADD COLUMN profile_picture VARCHAR(255) NULL; 
