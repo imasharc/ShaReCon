@@ -19,7 +19,8 @@ const Post = {
                 p.text_content,
                 p.created_at,
                 p.updated_at,
-                a.username
+                a.username,
+                a.profile_picture
             FROM
                 post p
             JOIN
@@ -47,13 +48,15 @@ const Post = {
                     p.created_at,
                     p.updated_at,
                     a_post.username,
+                    a_post.profile_picture,
                     JSON_AGG(
                         JSON_BUILD_OBJECT(
                             'id', c.id,
                             'text_content', c.text_content,
                             'created_at', c.created_at,
                             'updated_at', c.updated_at,
-                            'username', a_comment.username
+                            'username', a_comment.username,
+                            'profile_picture', a_comment.profile_picture
                         )
                     ) AS comments
                 FROM
@@ -93,6 +96,7 @@ const Post = {
                 SELECT
                     a.id,
                     a.username,
+                    a.profile_picture,
                     JSON_AGG(
                         JSON_BUILD_OBJECT(
                             'id', p.id,

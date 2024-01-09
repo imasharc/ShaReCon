@@ -202,6 +202,45 @@ const Account = {
         }
     },
 
+    updatePfpByUsername: async (username: string, profile_picture: string) => {
+        try {
+            // Fetch the old data for the user
+            const oldData = await Account.getByUsername(username);
+
+            if (!oldData) {
+                return null; // Handle the case where the user does not exist
+            }
+
+            // Compare the old data with the new data
+            const updatedData = {
+                profile_picture: profile_picture || oldData.profile_picture,
+            };
+
+            // Hash the new password if provided, otherwise, use the old hashed password
+            // const hashedPassword = updatedData.password ? await bcryptjs.hash(password, 10) : oldData.password;
+
+            console.log(updatedData.profile_picture);
+            const query = {
+                text: `UPDATE account
+                    SET profile_picture = $2
+                    WHERE username = $1
+                    RETURNING *`,
+                values: [username, updatedData.profile_picture],
+            };
+
+            const data = await pool.query(query);
+
+            if (data.rows.length > 0) {
+                return data.rows[0];
+            } else {
+                return null;
+            }
+        } catch (err) {
+            console.error('Error in updateByUsername:', err);
+            throw err;
+        }
+    },
+
     updateByUsername: async (username: string, newUsername: string, firstName: string, lastName: string, email: string, password: string, token: string) => {
         try {
             // Fetch the old data for the user

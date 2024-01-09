@@ -6,6 +6,7 @@ const session = require('express-session')
 const cookieParser = require('cookie-parser');
 var pool = require('./db')
 const { validateToken } = require('./utils/JWT')
+const path = require('path');
 const app = express();
 const port = 3001;
 
@@ -22,6 +23,8 @@ app.use(session({
     maxAge: 24 * 60 * 60 * 1000
   }
 }))
+
+app.use('/assets', express.static(path.join(__dirname, '../../assets/')));
 
 // CONTROLLER ROUTES
 const accountApiRouter = require('./routes/api/accountApiRoutes');

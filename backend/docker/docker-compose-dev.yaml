@@ -11,6 +11,7 @@ services:
     volumes:
       - ../:/usr/src/app/backend
       - /usr/src/app/node_modules
+      - ../../assets:/usr/src/app/assets
     ports:
       - 3001:3001
     command: npm run dev
