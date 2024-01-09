@@ -8,7 +8,7 @@ ShaReCon is intended to be Modern Open-Source Social Media Platform (that is als
 
 # Documentation
 
-Here's the link to the documentation (![diploma work](https://docs.google.com/document/d/12JScNMTtzE-o2z3nql9wiOhPe0rlIFG2sg1Z7jdcJ7Y/edit?usp=sharing))
+Here's the link to the documentation (diploma work)(https://docs.google.com/document/d/12JScNMTtzE-o2z3nql9wiOhPe0rlIFG2sg1Z7jdcJ7Y/edit?usp=sharing)
 
 ## Features
 
