@@ -28,6 +28,12 @@ The following diagram describes the use cases for feed activities for different 
 
 ![feed activities - use case diagram](doc/feed%20activities%20-%20use%20case%20diagram.png)
 
+The following diagram describes the sequence of actions necessary to take in order to complete the given functionality task.
+
+![register - sequence diagram](doc\sequence_diagram_add_new_post.png)
+
+![add new post - sequence diagram](doc\sequence_diagram_register.png)
+
 The following diagram describes the platform architecture - including docker containers.
 
 ![platform architecture](doc/platform%20architecture.png)
